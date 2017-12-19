@@ -1,0 +1,58 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{epsfig}
+\usepackage{epstopdf}
+\usepackage{titling}
+\usepackage{url}
+\usepackage{array}
+\usepackage{enumerate}
+\usepackage{ physics }
+\usepackage[hmargin=3.5cm,vmargin=2.5cm]{geometry}
+\title{Smartphone Spectrophotometer Notes}
+\author{Shehtab Zaman }
+\date{December 2017}
+
+\begin{document}
+\maketitle
+\section{Introduction}
+
+\section{Background}
+\section{Sensor Baseline}
+\section{Ambient Light Baseline}
+\section{Absorbance Model}
+\subsection{Lambertian BRDF}
+Assuming a diffuse reflection and rotational symmetry of the
+secchi disk, we can assume the Lambertian BRDF to be
+as constant, with the form,
+\[
+f(\theta_i, \phi_i; \theta_r , \phi_r) = \frac{\rho_d}{\pi}
+\]
+
+The $\rho_d$ is the albedo of the secchi disk.
+
+Inside the water column with the assumption that the light source is normal to the surface,
+the surface radiance is then,
+
+\[
+L = \frac{\rho_d}{\pi} I_0
+\]
+
+Where, $I_0$ is the intensity of the incident light.
+
+\underline{Note:} The intensity of light in the water will lower than
+the intensity of light outside.
+(The incident light will need to take into account Fresnel Diffraction possibly?)
+
+\section{References}
+
+\begin{thebibliography}{9}
+  \bibitem{test}jhjkhjkhjhkj
+\end{thebibliography}
+
+
+
+\end{document}
