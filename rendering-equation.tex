@@ -1,0 +1,57 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{epsfig}
+\usepackage{epstopdf}
+\usepackage{titling}
+\usepackage{url}
+\usepackage{array}
+\usepackage{enumerate}
+\usepackage{ physics }
+\usepackage[hmargin=3.5cm,vmargin=2.5cm]{geometry}
+\title{Rendering Equation in Water Column}
+\author{Shehtab Zaman }
+\date{December 2017}
+
+\begin{document}
+\section{Figures}
+\section{Model}
+
+From the general radiance equation,the reflected radiance is given by
+
+\begin{equation}
+  L_r = \int^{2\pi}_{\phi_i = 0}\int^{\frac{\pi}{2}}_{\theta_i = 0}
+  f_r L_s T(d)cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
+\end{equation}
+
+Where, the $ f_r$ is Lambertian BRDF.
+
+The transmission function $T(d)$ can be related to the depth of the relfecting
+surface.
+
+Given an incident light of radiance, $L_s$,
+we have the decomposed radiance as
+$$L_{sa} + L_{sb} = L$$
+where, $ L_{sa}$ is the absorbed light radiation.
+
+
+
+According to the Beer-Lambert Law we have the relation,
+
+\begin{equation}
+  Log\left(\frac{L}{L_sb}\right) = T(d)
+\end{equation}
+and,
+\begin{equation}
+  T(d) = \frac{\epsilon d C}{cos(\theta)}
+\end{equation}
+where, $\epsilon$ is the molar absorptivity, $ d$ is the depth, $ C$ is the concentration.
+
+Since we want to specifically take into account the
+absorbance due to chlorophyll a, we limit the consideration
+to considering the radiance of light at $\lambda = 662nm$
+
+\end{document}
