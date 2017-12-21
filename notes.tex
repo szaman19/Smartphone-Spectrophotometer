@@ -20,6 +20,18 @@
 \maketitle
 \section{Introduction}
 
+\subsection{Outline of Procedure}
+The problem of using variable smartphone cameras for the
+spectrophotometry of lake water consists of a set of challenges.
+The general outline of the procedure is as follows:
+\begin{enumerate}
+\item Obtain the raw image data for submerged and unsubmerged secchi disk
+\item Obtain the intensities of the captured image using QE Curves
+\item Normalize intensity to baseline factoring in shutter speed and aperture
+\item Obtain intensity of a particular wavelenth provided RGB value
+\item From Beer-Lambert law find the concentration of materials in the water
+\end{enumerate}
+
 % \section{Background}
 \section{Sensor Baseline}
 
@@ -46,10 +58,32 @@ $$ I \propto \frac{1}{T}$$
 If the pixel value is an estimate of the power per solid angle per area of the sensor, we can combine the
 shutter speed and aperture relations as
 
-$$ I \propto \frac{1}{T \cdot f^2}$$    
+$$ I \propto \frac{1}{T \cdot f^2}$$
 %\section{Ambient Light Baseline}
+\section{Wavelength Intensity}
+
+The raw data obtained from the camera provides us with the three values in the
+R,G,B channels per pixel (see mathemtica for example). Given a specific wavelength, $ \lambda$, we want to obtain the
+\underline{intensity} at that wavelenth.
+
+\subsection{Spectral Sensitivity Function}
+
+Given constant ISO and aperture, at each wavelenth, $ \lambda$, the spectral sensitivity
+in RGB channels is calculated by
+$$ c(\lambda) = \frac{d(\lambda)}{r(\lambda) t(\lambda)} $$
+where, $ r(\lambda)$ is the radiance. $t(\lambda) $ is the exposure time.
+$d(\lambda)$ is the data.
+
+Therefore rdiance at a wavelength would be,
+
+$$ r(\lambda) = \frac{d(\lambda)}{c(\lambda)t'(\lambda, f)} $$
+
+with $t'(\lambda) $ is a function of the wavelength and aperture as well.
+
 \section{Absorbance Model}
 \subsection{Lambertian BRDF}
+\subsubsection{Unsubmerged Secchi Disk Model}
+
 Assuming a diffuse reflection and rotational symmetry of the
 secchi disk, we can assume the Lambertian BRDF to be
 as constant, with the form,
@@ -68,9 +102,10 @@ L = \frac{\rho_d}{\pi} I_0
 
 Where, $I_0$ is the intensity of the incident light.
 
-\underline{Note:} The intensity of light in the water will lower than
-the intensity of light outside.
-(The incident light will need to take into account Fresnel Diffraction possibly?)
+% \underline{Note:} The intensity of light in the water will lower than
+% the intensity of light outside. The refractive be taken into account in the
+% rendering equation.
+% (The incident light will need to take into account Fresnel Diffraction possibly?)
 
 \section{References}
 
