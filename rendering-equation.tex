@@ -11,13 +11,15 @@
 \usepackage{array}
 \usepackage{enumerate}
 \usepackage{ physics }
+\usepackage{graphicx}
+\graphicspath{ {/} }
 \usepackage[hmargin=3.5cm,vmargin=2.5cm]{geometry}
 \title{Rendering Equation in Water Column}
 \author{Shehtab Zaman }
 \date{December 2017}
 
 \begin{document}
-\section{Figures}
+% \section{Figures}
 \section{Model}
 
 From the general radiance equation,the reflected radiance is given by
@@ -32,9 +34,9 @@ Where, the $ f_r$ is Lambertian BRDF.
 The transmission function $T(d)$ can be related to the depth of the relfecting
 surface.
 
-Given an incident light of radiance, $L_s$,
+Given an incident light of radiance, $L_0$,
 we have the decomposed radiance as
-$$L_{sa} + L_{sb} = L$$
+$$L_{sa} + L_{s} = L_0$$
 where, $ L_{sa}$ is the absorbed light radiation.
 
 
@@ -42,16 +44,55 @@ where, $ L_{sa}$ is the absorbed light radiation.
 According to the Beer-Lambert Law we have the relation,
 
 \begin{equation}
-  Log\left(\frac{L}{L_sb}\right) = T(d)
+  Log\left(\frac{L_0}{L_{s}}\right) = T(d)
 \end{equation}
 and,
 \begin{equation}
-  T(d) = \frac{\epsilon d C}{cos(\theta)}
+  T(d) = 10^\frac{-\epsilon d C}{cos(\theta)}
 \end{equation}
 where, $\epsilon$ is the molar absorptivity, $ d$ is the depth, $ C$ is the concentration.
 
 Since we want to specifically take into account the
 absorbance due to chlorophyll a, we limit the consideration
 to considering the radiance of light at $\lambda = 662nm$
+
+Even though the incident light is poloychromatic, but since we are considering the specific wavelenth
+and the incident light is so spread out, we can reasonably treat it as monochromatic. (?)
+
+The reflectance in the particular frequency then becomes,
+
+\begin{equation}
+  L_{r \lambda} = \int^{2\pi}_{\phi_i = 0}\int^{\theta_c}_{\theta_i = 0}
+  f_r L_{s\lambda} 10^\frac{-\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
+\end{equation}
+Here we sum the incident angle upto some cutoff angle $\theta_c$, as the higher incident lights
+have negligible effect on the
+We can further make an assumption that the secchi disk is perfectly matte with rotationally
+invariant reflectance. The Lambertian BRDF is thus,
+
+\begin{equation}
+  f_r = \frac{\rho_D}{\pi}
+\end{equation}
+Combining (4) and (5) we get the reflectance off of the surface of secchi disk as,
+
+\begin{equation}
+  L_{r \lambda} = \int^{2\pi}_{\phi_i = 0}\int^{\theta_c}_{\theta_i = 0}
+  \frac{\rho_D}{\pi} L_{s\lambda} 10^\frac{-\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
+\end{equation}
+Plotting the function with varying depth and concentration (ranging form 0<C<1), we get,
+
+\begin{center}
+    \includegraphics[scale=.5]{3dPlot}
+\end{center}
+Restricting the cutoff to $ \theta_c = \frac{\pi}{3}$, holding the concentration consant,
+we obtain the relationship between $ \frac{L_{r\lambda}}{L_{s\lambda}}$ and depth (not in cm as we are using
+$ \epsilon =1$ for modelling purposes)
+\begin{center}
+    \includegraphics[scale=.5]{2dPlot}
+\end{center}
+\newline
+
+
+
 
 \end{document}
