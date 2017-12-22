@@ -44,7 +44,7 @@ where, $ L_{sa}$ is the absorbed light radiation.
 According to the Beer-Lambert Law we have the relation,
 
 \begin{equation}
-  Log\left(\frac{L_0}{L_{s}}\right) = T(d)
+  Log_{10}\left(\frac{L_0}{L_{s}}\right) = Log_{10}(T(d))
 \end{equation}
 and,
 \begin{equation}
@@ -79,7 +79,8 @@ Combining (4) and (5) we get the reflectance off of the surface of secchi disk a
   L_{r \lambda} = \int^{2\pi}_{\phi_i = 0}\int^{\theta_c}_{\theta_i = 0}
   \frac{\rho_D}{\pi} L_{s\lambda} 10^\frac{-\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
 \end{equation}
-Plotting the function with varying depth and concentration (ranging form 0<C<1), we get,
+
+Plotting the function with varying depth and concentration (ranging form $0<C<1$), we get,
 
 \begin{center}
     \includegraphics[scale=.5]{3dPlot}
