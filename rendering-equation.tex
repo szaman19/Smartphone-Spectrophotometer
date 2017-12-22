@@ -31,7 +31,7 @@ From the general radiance equation,the reflected radiance is given by
 
 Where, the $ f_r$ is Lambertian BRDF.
 
-The transmission function $T(d)$ can be related to the depth of the relfecting
+The transmission function $T(d)$ can be related to the depth of the reflecting
 surface.
 
 Given an incident light of radiance, $L_0$,
@@ -56,7 +56,7 @@ Since we want to specifically take into account the
 absorbance due to chlorophyll a, we limit the consideration
 to considering the radiance of light at $\lambda = 662nm$
 
-Even though the incident light is poloychromatic, but since we are considering the specific wavelenth
+Even though the incident light is poloychromatic, but since we are considering the specific wavelength
 and the incident light is so spread out, we can reasonably treat it as monochromatic. (?)
 
 The reflectance in the particular frequency then becomes,
@@ -66,7 +66,8 @@ The reflectance in the particular frequency then becomes,
   f_r L_{s\lambda} 10^\frac{-\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
 \end{equation}
 Here we sum the incident angle upto some cutoff angle $\theta_c$, as the higher incident lights
-have negligible effect on the
+have negligible effect on the reflected light.
+
 We can further make an assumption that the secchi disk is perfectly matte with rotationally
 invariant reflectance. The Lambertian BRDF is thus,
 
@@ -80,7 +81,7 @@ Combining (4) and (5) we get the reflectance off of the surface of secchi disk a
   \frac{\rho_D}{\pi} L_{s\lambda} 10^\frac{-\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
 \end{equation}
 
-Plotting the function with varying depth and concentration (ranging form $0<C<1$), we get,
+Plotting the function with varying depth and concentration (ranging form $0 \leq \epsilon C \leq1$), we get,
 
 \begin{center}
     \includegraphics[scale=.5]{3dPlot}
@@ -91,9 +92,9 @@ $ \epsilon =1$ for modelling purposes)
 \begin{center}
     \includegraphics[scale=.5]{2dPlot}
 \end{center}
-\newline
-
-
-
-
+Following the same procedure as before, keeping the depth constant, we have the relationship between the
+concentration and relative reflectance ($ \frac{L_{r\lambda}}{L_{s\lambda}}$).
+\begin{center}
+  \includegraphics[scale=.5]{2dPlotConcentration}
+\end{center}
 \end{document}
