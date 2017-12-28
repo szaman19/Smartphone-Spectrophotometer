@@ -20,6 +20,8 @@
 
 \begin{document}
 % \section{Figures}
+
+\maketitle
 \section{Model}
 
 From the general radiance equation,the reflected radiance is given by
@@ -81,6 +83,8 @@ Combining (4) and (5) we get the reflectance off of the surface of secchi disk a
   \frac{\rho_D}{\pi} L_{s\lambda} 10^\frac{-\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
 \end{equation}
 
+Chlorophyll a has an extinction coefficient of $ \epsilon_{662} = 0.088 \frac{cm^{-1}}{g}$ at 663nm.
+
 Plotting the function with varying depth and concentration (ranging form $0 \leq \epsilon C \leq1$), we get,
 
 \begin{center}
@@ -97,4 +101,11 @@ concentration and relative reflectance ($ \frac{L_{r\lambda}}{L_{s\lambda}}$).
 \begin{center}
   \includegraphics[scale=.5]{2dPlotConcentration}
 \end{center}
+
+\section{References}
+
+Harold H. Strain, Mary R. Thomas, Joseph J. Katz, Spectral absorption properties of ordinary and fully deuteriated chlorophylls a and b, In Biochimica et Biophysica Acta, Volume 75, 1963, Pages 306-311, ISSN 0006-3002, https://doi.org/10.1016/0006-3002(63)90617-6.
+(http://www.sciencedirect.com/science/article/pii/0006300263906176)
+
+
 \end{document}
