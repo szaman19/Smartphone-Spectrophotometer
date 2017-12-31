@@ -12,6 +12,8 @@
 \usepackage{enumerate}
 \usepackage{ physics }
 \usepackage{graphicx}
+\usepackage{marginnote}
+
 \graphicspath{ {/} }
 \usepackage[hmargin=3.5cm,vmargin=2.5cm]{geometry}
 \title{Rendering Equation in Water Column}
@@ -22,7 +24,7 @@
 % \section{Figures}
 
 \maketitle
-\section{Model}
+\section{Rendering Equation}
 
 From the general radiance equation,the reflected radiance is given by
 
@@ -46,13 +48,14 @@ where, $ L_{sa}$ is the absorbed light radiation.
 According to the Beer-Lambert Law we have the relation,
 
 \begin{equation}
-  Log_{10}\left(\frac{L_0}{L_{s}}\right) = Log_{10}(T(d))
+  Log_{10}\left(\frac{L_0}{L_{s}}\right) = \frac{-\epsilon d C}{cos(\theta)}
 \end{equation}
 and,
 \begin{equation}
   T(d) = 10^\frac{-\epsilon d C}{cos(\theta)}
 \end{equation}
-where, $\epsilon$ is the molar absorptivity, $ d$ is the depth, $ C$ is the concentration.
+where, $\epsilon$ is the molar absorptivity in $ L \cdot cm^{-1} \cdot mol^{-1}$,
+$ d$ is the depth in $cm$, $ C$ is the concentration in $mol \cdot L^{-1} $.
 
 Since we want to specifically take into account the
 absorbance due to chlorophyll a, we limit the consideration
@@ -67,8 +70,12 @@ The reflectance in the particular frequency then becomes,
   L_{r \lambda} = \int^{2\pi}_{\phi_i = 0}\int^{\theta_c}_{\theta_i = 0}
   f_r L_{s\lambda} 10^\frac{-\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
 \end{equation}
+\marginnote{The cutoff angle should ideally vary with the azimuthal position of the sun, time of day and the lattitude of position.}
 Here we sum the incident angle upto some cutoff angle $\theta_c$, as the higher incident lights
 have negligible effect on the reflected light.
+
+
+
 
 We can further make an assumption that the secchi disk is perfectly matte with rotationally
 invariant reflectance. The Lambertian BRDF is thus,
@@ -76,6 +83,7 @@ invariant reflectance. The Lambertian BRDF is thus,
 \begin{equation}
   f_r = \frac{\rho_D}{\pi}
 \end{equation}
+Where, $ \rho_D$ is the albedo of the secchi disk with $ 0 \leq \rho_D \leq 1$
 Combining (4) and (5) we get the reflectance off of the surface of secchi disk as,
 
 \begin{equation}
@@ -83,29 +91,46 @@ Combining (4) and (5) we get the reflectance off of the surface of secchi disk a
   \frac{\rho_D}{\pi} L_{s\lambda} 10^\frac{-\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
 \end{equation}
 
-Chlorophyll a has an extinction coefficient of $ \epsilon_{662} = 0.088 \frac{cm^{-1}}{g}$ at 663nm.
+Chlorophyll a has an extinction coefficient of $ \epsilon_{663} = 0.088 \frac{cm^{-1}}{g}$ at 663nm.
+Since the light collected by the camera will have had to travel up the water column we must add
+another absorbance factor determined by the equation 2.
 
-Plotting the function with varying depth and concentration (ranging form $0 \leq \epsilon C \leq1$), we get,
+The light incident on the camera is therefore,
+\begin{align}
+  L_{i 663} = \int^{2\pi}_{\phi_i = 0}\int^{\theta_c}_{\theta_i = 0}
+  \frac{\rho_D}{\pi}  L_{s 663} 10^\frac{-2\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
+\end{align}
 
+\section{Model}
+
+Carrying out a simplistic modelling of the rendering equation with the secchi disk albedo, $ \rho_d = 1$,
+we can carry out the model the intensity percent ratio of reflected light absorbed by the camera and incident light on
+the submerged secchi disk, $ \frac{L_{r663}}{L_{i 663}}$ with,
 \begin{center}
-    \includegraphics[scale=.5]{3dPlot}
+    \includegraphics[scale=.70]{ContourPlot}
 \end{center}
-Restricting the cutoff to $ \theta_c = \frac{\pi}{3}$, holding the concentration consant,
-we obtain the relationship between $ \frac{L_{r\lambda}}{L_{s\lambda}}$ and depth (not in cm as we are using
-$ \epsilon =1$ for modelling purposes)
+
+The concentration ranges from $ 1 \cdot 10^{-7} mol\cdot L^{-1}$ to $5 \cdot 10^{-7} mol\cdot L^{-1}$. The depth being modeled
+range from $10cm$ to $ 50cm$
+
+Holding the concentration consant at $ 1 \cdot 10^{-7} mol\cdot L^{-1}$, we can model the
+relationship between $ \frac{L_{r663}}{L_{i663}}$ and depth.
 \begin{center}
     \includegraphics[scale=.5]{2dPlot}
 \end{center}
-Following the same procedure as before, keeping the depth constant, we have the relationship between the
-concentration and relative reflectance ($ \frac{L_{r\lambda}}{L_{s\lambda}}$).
+
+Following the same procedure as before, keeping the depth constant at $ 20 cm$, we have the relationship between the
+concentration and intensity ratio ($ \frac{L_{r663}}{L_{i663}}$).
 \begin{center}
   \includegraphics[scale=.5]{2dPlotConcentration}
 \end{center}
 
+The simulations were carried out with numerical approximations in mathemtica and the cutoff angle angle used was $ \frac{\pi}{2.1}$.
+($\frac{\pi}{2}$ creates a discontinuity in the integrand)
 \section{References}
 
 Harold H. Strain, Mary R. Thomas, Joseph J. Katz, Spectral absorption properties of ordinary and fully deuteriated chlorophylls a and b, In Biochimica et Biophysica Acta, Volume 75, 1963, Pages 306-311, ISSN 0006-3002, https://doi.org/10.1016/0006-3002(63)90617-6.
-(http://www.sciencedirect.com/science/article/pii/0006300263906176)
+% (http://www.sciencedirect.com/science/article/pii/0006300263906176)
 
 
 \end{document}
