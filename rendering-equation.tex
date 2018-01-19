@@ -26,7 +26,29 @@
 \maketitle
 \section{Rendering Equation}
 
-From the general radiance equation,the reflected radiance is given by
+The interaction of incident, reflected, and emmited light at any given point is
+described by the general Rendering Equation,
+
+\begin{equation}
+  L_o = L_e + L_r
+\end{equation}
+Where, $L_o$ is the light leaving the particular point, $ L_e$ is the light emitted
+from the point (if it is a source), and $L_r $ is the light reflected from that point.
+
+Since we will be working with non-light generating disks, we set,
+$ L_e = 0$.
+The light reflected off of the surface of a disk, can be calculated using the
+Bidirectional Reflectance Distribution Function (BRDF)[3].
+For a given point on a surface, the general BRDF is,
+
+\begin{equation}
+\rho_d(\phi_0, \theta_0,\phi_f, \theta_f)=\frac{L_r{\phi_f, \theta_f}}{L_I{\phi_0, \theta_0}}
+\end{equation}
+Where $\phi_0, \theta_0$ are the incident azimuthal and polar angle of the light source,
+and $\phi_f, \theta_0$ are the azimuthal and polar angle with respect to the viewer and
+and relfected point.
+
+From the general rendering equation, the reflected radiance is given by
 
 \begin{equation}
   L_r = \int^{2\pi}_{\phi_i = 0}\int^{\frac{\pi}{2}}_{\theta_i = 0}
@@ -38,12 +60,25 @@ Where, the $ f_r$ is Lambertian BRDF.
 The transmission function $T(d)$ can be related to the depth of the reflecting
 surface.
 
-Given an incident light of radiance, $L_0$,
+\subsection{Beer-Lambert Law}
+
+The Beer-Lambert provides us with a linear relationship betweem incident light, absorbed light,
+and concentration of absorbed light.
+
+The wavelenght dependent relation is given as,
+
+\begin{equation}
+  \epsilon d c = \Log_10{\frac{I_0}{I_f}}
+\end{equation}
+where, $\epsilon$ is the molar absorptivity in $ L \cdot cm^{-1} \cdot mol^{-1}$,
+$ d$ is the depth in $cm$, $ C$ is the concentration in $mol \cdot L^{-1} $. $ I_0$
+is the initial light intensity, and $ I_f$ is the final intensity after
+absorption.
+
+Given some incident light of radiance, $L_0$, 
 we have the decomposed radiance as
 $$L_{sa} + L_{s} = L_0$$
 where, $ L_{sa}$ is the absorbed light radiation.
-
-
 
 According to the Beer-Lambert Law we have the relation,
 
@@ -54,8 +89,7 @@ and,
 \begin{equation}
   T(d) = 10^\frac{-\epsilon d C}{cos(\theta)}
 \end{equation}
-where, $\epsilon$ is the molar absorptivity in $ L \cdot cm^{-1} \cdot mol^{-1}$,
-$ d$ is the depth in $cm$, $ C$ is the concentration in $mol \cdot L^{-1} $.
+
 
 Since we want to specifically take into account the
 absorbance due to chlorophyll a, we limit the consideration
@@ -73,8 +107,6 @@ The reflectance in the particular frequency then becomes,
 \marginnote{The cutoff angle should ideally vary with the azimuthal position of the sun, time of day and the lattitude of position.}
 Here we sum the incident angle upto some cutoff angle $\theta_c$, as the higher incident lights
 have negligible effect on the reflected light.
-
-
 
 
 We can further make an assumption that the secchi disk is perfectly matte with rotationally
@@ -128,10 +160,21 @@ concentration and intensity ratio ($ \frac{L_{r663}}{L_{i663}}$).
 
 The simulations were carried out with numerical approximations in mathemtica and the cutoff angle angle used was $ \frac{\pi}{2.1}$.
 ($\frac{\pi}{2}$ creates a discontinuity in the integrand)
+
+\section{Notes/Definitions}
+\textbf{Radiance:} Radiant power per unit foreshortened area per unit solid angle. "throuput for light given point in a given direction" [3]
+\newline
+\textbf{Irradiance:} Incident power per unit area. (Light incident on surface or point)
+\newline
+\textbf{Bidirectinal Reflectance Distribution Function (BRDF):} The ratio of irradiance and radiance on a surface.
+\newline
 \section{References}
 
-Harold H. Strain, Mary R. Thomas, Joseph J. Katz, Spectral absorption properties of ordinary and fully deuteriated chlorophylls a and b, In Biochimica et Biophysica Acta, Volume 75, 1963, Pages 306-311, ISSN 0006-3002, https://doi.org/10.1016/0006-3002(63)90617-6.
+[1]Harold H. Strain, Mary R. Thomas, Joseph J. Katz, Spectral absorption properties of ordinary and fully deuteriated chlorophylls a and b, In Biochimica et Biophysica Acta, Volume 75, 1963, Pages 306-311, ISSN 0006-3002, https://doi.org/10.1016/0006-3002(63)90617-6.
 % (http://www.sciencedirect.com/science/article/pii/0006300263906176)
 
-
+[2]https://www.cs.princeton.edu/~smr/cs348c-97/surveypaper.html \newline
+[3] https://www2.cs.arizona.edu/classes/cs433/fall08/lectures/BRDFandGlobalIllum.pdf
+\newline
+[4] Beer-Lambert Law (http://life.nthu.edu.tw/~labcjw/BioPhyChem/Spectroscopy/beerslaw.htm)
 \end{document}
