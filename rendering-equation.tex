@@ -13,18 +13,22 @@
 \usepackage{ physics }
 \usepackage{graphicx}
 \usepackage{marginnote}
+\usepackage{getfiledate}
 
 \graphicspath{ {/} }
 \usepackage[hmargin=3.5cm,vmargin=2.5cm]{geometry}
 \title{Rendering Equation in Water Column}
-\author{Shehtab Zaman }
-\date{December 2017}
+\author{Shehtab Zaman \\ Binghamton University}
+\date{Last Update {\getfiledate[putprefix=false, notime= true]{rendering-equation.tex}}}
 
 \begin{document}
 % \section{Figures}
 
 \maketitle
-\section{Rendering Equation}
+\section{Model}
+\subsection{Rendering Equation}
+
+
 
 The interaction of incident, reflected, and emmited light at any given point is
 described by the general Rendering Equation,
@@ -65,31 +69,34 @@ surface.
 The Beer-Lambert provides us with a linear relationship betweem incident light, absorbed light,
 and concentration of absorbed light.
 
-The wavelenght dependent relation is given as,
+The wavelength dependent relation is given as,
 
 \begin{equation}
-  \epsilon d c = \Log_10{\frac{I_0}{I_f}}
+  \epsilon d c = Log_10{\frac{I_0}{I_f}}
 \end{equation}
 where, $\epsilon$ is the molar absorptivity in $ L \cdot cm^{-1} \cdot mol^{-1}$,
 $ d$ is the depth in $cm$, $ C$ is the concentration in $mol \cdot L^{-1} $. $ I_0$
 is the initial light intensity, and $ I_f$ is the final intensity after
 absorption.
 
-Given some incident light of radiance, $L_0$, 
+Given some incident light of radiance, $L_0$, on the water surface,
+
 we have the decomposed radiance as
-$$L_{sa} + L_{s} = L_0$$
-where, $ L_{sa}$ is the absorbed light radiation.
+$$ L_0 = L_{sa} + L_{s}$$
+where, $ L_{sa}$ is the absorbed light radiation. $ L_{s}$ is the light
+incident on the point under water and being reflected by the disk.
 
 According to the Beer-Lambert Law we have the relation,
 
 \begin{equation}
-  Log_{10}\left(\frac{L_0}{L_{s}}\right) = \frac{-\epsilon d C}{cos(\theta)}
+  Log_{10}\left(\frac{L_0}{L_{s}}\right) = \frac{\epsilon d C}{cos(\theta)}
 \end{equation}
 and,
 \begin{equation}
   T(d) = 10^\frac{-\epsilon d C}{cos(\theta)}
 \end{equation}
 
+\subsection{Reflectance}
 
 Since we want to specifically take into account the
 absorbance due to chlorophyll a, we limit the consideration
@@ -133,14 +140,22 @@ The light incident on the camera is therefore,
   \frac{\rho_D}{\pi}  L_{s 663} 10^\frac{-2\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
 \end{align}
 \section{Analytic Solution}
+Equation (10) can be solved analytically for a light source which is at angle $\theta_0$ to $ \theta_{c}$.
+The concentration of the chlorophyll, c, can be retrieved by,
+\begin{align}
+  C &= Log_{10}\left [ \int_{\theta_0}^{\theta_c} \int_{0}^{2\pi}
+        \frac{\rho_D}{\pi} \frac{L_{s 663}} {L_{i 663}} 10^\frac{-2\epsilon d}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i\right]
+    \\ &= Log_{10}\left[2 \rho_D \frac{L_{s 663}} {L_{i 663}} 10^{-2\epsilon d}\int_{\theta_0}^{\theta_c} 10^\frac{1 }{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i\right]
+    \\ &= Log_{10}\left[2 \rho_D \frac{L_{s 663}} {L_{i 663}} 10^{-2\epsilon d} \left( \left. \frac{-ln(10)cos(\theta_i)+1}{ln^2(10)10^{cos(\theta_i)}}\right\rvert^{\theta_c}_{\theta_0}\right)\right]
+\end{align}
 
-\section{Model}
+\section{Numerical Simulations}
 
 Carrying out a simplistic modelling of the rendering equation with the secchi disk albedo, $ \rho_d = 1$,
 we can carry out the model the intensity percent ratio of reflected light absorbed by the camera and incident light on
 the submerged secchi disk, $ \frac{L_{r663}}{L_{i 663}}$ with,
 \begin{center}
-    \includegraphics[scale=.70]{ContourPlot}
+    \includegraphics[scale=.40]{ContourPlot}
 \end{center}
 
 The concentration ranges from $ 1 \cdot 10^{-7} mol\cdot L^{-1}$ to $5 \cdot 10^{-7} mol\cdot L^{-1}$. The depth being modeled
@@ -149,13 +164,13 @@ range from $10cm$ to $ 50cm$
 Holding the concentration consant at $ 1 \cdot 10^{-7} mol\cdot L^{-1}$, we can model the
 relationship between $ \frac{L_{r663}}{L_{i663}}$ and depth.
 \begin{center}
-    \includegraphics[scale=.5]{2dPlot}
+    \includegraphics[scale=.4]{2dPlot}
 \end{center}
 
 Following the same procedure as before, keeping the depth constant at $ 20 cm$, we have the relationship between the
 concentration and intensity ratio ($ \frac{L_{r663}}{L_{i663}}$).
 \begin{center}
-  \includegraphics[scale=.5]{2dPlotConcentration}
+  \includegraphics[scale=.4]{2dPlotConcentration}
 \end{center}
 
 The simulations were carried out with numerical approximations in mathemtica and the cutoff angle angle used was $ \frac{\pi}{2.1}$.
@@ -172,8 +187,7 @@ The simulations were carried out with numerical approximations in mathemtica and
 
 [1]Harold H. Strain, Mary R. Thomas, Joseph J. Katz, Spectral absorption properties of ordinary and fully deuteriated chlorophylls a and b, In Biochimica et Biophysica Acta, Volume 75, 1963, Pages 306-311, ISSN 0006-3002, https://doi.org/10.1016/0006-3002(63)90617-6.
 % (http://www.sciencedirect.com/science/article/pii/0006300263906176)
-
-[2]https://www.cs.princeton.edu/~smr/cs348c-97/surveypaper.html \newline
+\newline[2]https://www.cs.princeton.edu/~smr/cs348c-97/surveypaper.html \newline
 [3] https://www2.cs.arizona.edu/classes/cs433/fall08/lectures/BRDFandGlobalIllum.pdf
 \newline
 [4] Beer-Lambert Law (http://life.nthu.edu.tw/~labcjw/BioPhyChem/Spectroscopy/beerslaw.htm)
