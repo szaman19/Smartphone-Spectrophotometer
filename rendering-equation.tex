@@ -19,7 +19,6 @@
 \usepackage[hmargin=3.5cm,vmargin=2.5cm]{geometry}
 \title{Rendering Equation in Water Column}
 \author{Shehtab Zaman \\ Binghamton University}
-\date{Last Update {\getfiledate[putprefix=false, notime= true]{rendering-equation.tex}}}
 
 \begin{document}
 % \section{Figures}
@@ -27,8 +26,6 @@
 \maketitle
 \section{Model}
 \subsection{Rendering Equation}
-
-
 
 The interaction of incident, reflected, and emmited light at any given point is
 described by the general Rendering Equation,
@@ -139,7 +136,7 @@ The light incident on the camera is therefore,
   L_{i 663} = \int^{2\pi}_{\phi_i = 0}\int^{\theta_c}_{\theta_i = 0}
   \frac{\rho_D}{\pi}  L_{s 663} 10^\frac{-2\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
 \end{align}
-\section{Analytic Solution}
+\subsection{Analytic Solution}
 Equation (10) can be solved analytically for a light source which is at angle $\theta_0$ to $ \theta_{c}$.
 The concentration of the chlorophyll, c, can be retrieved by,
 \begin{align}
@@ -148,6 +145,15 @@ The concentration of the chlorophyll, c, can be retrieved by,
     \\ &= Log_{10}\left[2 \rho_D \frac{L_{s 663}} {L_{i 663}} 10^{-2\epsilon d}\int_{\theta_0}^{\theta_c} 10^\frac{1 }{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i\right]
     \\ &= Log_{10}\left[2 \rho_D \frac{L_{s 663}} {L_{i 663}} 10^{-2\epsilon d} \left( \left. \frac{-ln(10)cos(\theta_i)+1}{ln^2(10)10^{cos(\theta_i)}}\right\rvert^{\theta_c}_{\theta_0}\right)\right]
 \end{align}
+
+\subsection{Snell's Law}
+
+\section{Experiment}
+
+\subsection{Set Up}
+
+
+
 
 \section{Numerical Simulations}
 
@@ -177,17 +183,21 @@ The simulations were carried out with numerical approximations in mathemtica and
 ($\frac{\pi}{2}$ creates a discontinuity in the integrand)
 
 \section{Notes/Definitions}
+
 \textbf{Radiance:} Radiant power per unit foreshortened area per unit solid angle. "throuput for light given point in a given direction" [3]
 \newline
 \textbf{Irradiance:} Incident power per unit area. (Light incident on surface or point)
 \newline
 \textbf{Bidirectinal Reflectance Distribution Function (BRDF):} The ratio of irradiance and radiance on a surface.
-\newline
+
+
 \section{References}
 
-[1]Harold H. Strain, Mary R. Thomas, Joseph J. Katz, Spectral absorption properties of ordinary and fully deuteriated chlorophylls a and b, In Biochimica et Biophysica Acta, Volume 75, 1963, Pages 306-311, ISSN 0006-3002, https://doi.org/10.1016/0006-3002(63)90617-6.
+[1] Harold H. Strain, Mary R. Thomas, Joseph J. Katz, Spectral absorption properties of ordinary and fully deuteriated chlorophylls a and b,
+In Biochimica et Biophysica Acta, Volume 75, 1963, Pages 306-311,
+ISSN 0006-3002, https://doi.org/10.1016/0006-3002(63)90617-6. \newline
 % (http://www.sciencedirect.com/science/article/pii/0006300263906176)
-\newline[2]https://www.cs.princeton.edu/~smr/cs348c-97/surveypaper.html \newline
+[2] https://www.cs.princeton.edu/~smr/cs348c-97/surveypaper.html \newline
 [3] https://www2.cs.arizona.edu/classes/cs433/fall08/lectures/BRDFandGlobalIllum.pdf
 \newline
 [4] Beer-Lambert Law (http://life.nthu.edu.tw/~labcjw/BioPhyChem/Spectroscopy/beerslaw.htm)
