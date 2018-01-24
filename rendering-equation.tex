@@ -14,12 +14,13 @@
 \usepackage{graphicx}
 \usepackage{marginnote}
 \usepackage{getfiledate}
+\usepackage{wrapfig}
 
 \graphicspath{ {/} }
 \usepackage[hmargin=3.5cm,vmargin=2.5cm]{geometry}
 \title{Rendering Equation in Water Column}
 \author{Shehtab Zaman \\ Binghamton University}
-
+\date{\today}
 \begin{document}
 % \section{Figures}
 
@@ -69,7 +70,7 @@ and concentration of absorbed light.
 The wavelength dependent relation is given as,
 
 \begin{equation}
-  \epsilon d c = Log_10{\frac{I_0}{I_f}}
+  \epsilon d c = Log_{10}{\frac{I_0}{I_f}}
 \end{equation}
 where, $\epsilon$ is the molar absorptivity in $ L \cdot cm^{-1} \cdot mol^{-1}$,
 $ d$ is the depth in $cm$, $ C$ is the concentration in $mol \cdot L^{-1} $. $ I_0$
@@ -146,11 +147,18 @@ The concentration of the chlorophyll, c, can be retrieved by,
     \\ &= Log_{10}\left[2 \rho_D \frac{L_{s 663}} {L_{i 663}} 10^{-2\epsilon d} \left( \left. \frac{-ln(10)cos(\theta_i)+1}{ln^2(10)10^{cos(\theta_i)}}\right\rvert^{\theta_c}_{\theta_0}\right)\right]
 \end{align}
 
-\subsection{Snell's Law}
+%\subsection{Snell's Law}
+
+%\subsubsection{Fresnel's Equation}
 
 \section{Experiment}
 
 \subsection{Set Up}
+Using a lamp as a point source, we can measure the efficacy of the model. The set up for the experiment is
+with a secchi disk positioned submerged at depth $d$, in a solution of water and particulates - possible food coloring
+or something similar- with known absorption coefficients $ \epsilon$. We can use a lamp as the point source of light. Placing
+the lamp at height $ H$ above the secchi disk, at an angle $\theta_a$.
+
 
 
 
