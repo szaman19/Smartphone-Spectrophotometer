@@ -15,6 +15,7 @@
 \usepackage{marginnote}
 \usepackage{getfiledate}
 \usepackage{wrapfig}
+\usepackage{gensymb}
 
 \graphicspath{ {/} }
 \usepackage[hmargin=3.5cm,vmargin=2.5cm]{geometry}
@@ -26,9 +27,53 @@
 
 \maketitle
 \section{Model}
+\subsection{Fresnels Reflection and Transmittance}
+
+If we consider the intensity of the light detected by the sensor, $ L_{sensor}$, we can
+effectively decompose the sources into two components: the reflection off of the air-water
+interface (air-to-air) $L_{reflected}$, and a proportion of the reflectance off of
+the disk underwater, $K \cdot L_{transimitted}$. Where
+$ K$ is determined by Rendering equation as the concentration of particulates as a parameter.
+
+Given the ambient atmospheric light intenstiy, $L_{atm}$, by energy considerations we can say
+$$L_{atm} = L_{reflected}+L_{transmitted}$$
+
+\subsubsection{Reflectance}
+Since the incident light is unpolarized, the reflectance is given
+by the average of S-polarized and P-polarized light. As an approximation
+for a given incident angle $\theta$, we can use Schlick's approximation to obtain
+reflectance R.
+$$ R(\theta) = \left(\frac{n_1-n_2}{n_1+n_2}\right)^2 +
+ \left(1-\left(\frac{n_1-n_2}{n_1+n_2}\right)^2\right)\left(1-cos(\theta)\right)^5 $$
+where, $ n_1$ is the index of refraction of the incident media (air in our case)
+and $ n_2$ is the index of refracton of the reflected media (water = 1.33).
+
+Since the reflectance is wavelength independent, we have,
+
+$$ L_{reflected} = R \cdot L_{atm}$$
+
+\subsubsection{Transmittance}
+\marginnote{In practice considering the reflection may be trivial as at $ \theta = 0$
+the maximum reflectance is $\approx 3\%$ and has a significant effect at higher incident
+angles only $(>60 \degree)$.}
+
+We can relate the transmittance $ T$ of the unpolarized light with
+the reflectance $ R$ as
+$$ T = 1 - R$$
+
+We have the transmitted light into the water as,
+
+$$ L_{transmitted} = T \cdot L_{atm} $$
+
+The attenuation $ L_{transmitted}$ due to chlorophyll absoprtion and reflection
+on the disk is discussed in the following sections.
+
+
+
 \subsection{Rendering Equation}
 
-The interaction of incident, reflected, and emmited light at any given point is
+The interaction of incident, reflected, and emmited light at any given point on a
+given surface is
 described by the general Rendering Equation,
 
 \begin{equation}
@@ -147,9 +192,11 @@ The concentration of the chlorophyll, c, can be retrieved by,
     \\ &= Log_{10}\left[2 \rho_D \frac{L_{s 663}} {L_{i 663}} 10^{-2\epsilon d} \left( \left. \frac{-ln(10)cos(\theta_i)+1}{ln^2(10)10^{cos(\theta_i)}}\right\rvert^{\theta_c}_{\theta_0}\right)\right]
 \end{align}
 
-%\subsection{Snell's Law}
+In this case, $ \theta_c$ is less than the $ \frac{\pi}{3}$ so we can assume the
+difference transmitted intensity is the same as the incident atmospheric intensity. The addition
+of higher incident angles would make equation unsolvable analytically
+(But I believe we can approximate using perturbation theory).
 
-%\subsubsection{Fresnel's Equation}
 
 \section{Experiment}
 
@@ -158,10 +205,6 @@ Using a lamp as a point source, we can measure the efficacy of the model. The se
 with a secchi disk positioned submerged at depth $d$, in a solution of water and particulates - possible food coloring
 or something similar- with known absorption coefficients $ \epsilon$. We can use a lamp as the point source of light. Placing
 the lamp at height $ H$ above the secchi disk, at an angle $\theta_a$.
-
-
-
-
 
 \section{Numerical Simulations}
 
@@ -196,7 +239,7 @@ The simulations were carried out with numerical approximations in mathemtica and
 \newline
 \textbf{Irradiance:} Incident power per unit area. (Light incident on surface or point)
 \newline
-\textbf{Bidirectinal Reflectance Distribution Function (BRDF):} The ratio of irradiance and radiance on a surface.
+\textbf{Bidirectional Reflectance Distribution Function (BRDF):} The ratio of irradiance and radiance on a surface.
 
 
 \section{References}
