@@ -197,7 +197,52 @@ difference transmitted intensity is the same as the incident atmospheric intensi
 of higher incident angles would make equation unsolvable analytically
 (But I believe we can approximate using perturbation theory).
 
+\section{Sensor Baseline}
 
+\subsection{Compensating for Exposure}
+
+\subsubsection{Aperture and Intensity}
+
+The aperture of, measured in f-stops, is the opening of the camera sensor. the
+f-stop measures the amount of sensors surface open to collect photons. Larger
+apertures create a smaller depth of field (should be considered when deciding on the baseline).
+
+The intensity of the incident light is inversely proportional to the square of the
+f-number.
+$$ I \propto \frac{1}{f^2} $$
+
+\subsubsection{Shutter Speed and Intensity}
+We can assume that the shutter speed (how long the sensor collects photons), is inversely proportional
+to the measured intensity.
+
+$$ I \propto \frac{1}{T}$$
+
+\subsubsection{Pixel values}
+
+If the pixel value is an estimate of the power per solid angle per area of the sensor, we can combine the
+shutter speed and aperture relations as
+
+$$ I \propto \frac{1}{T \cdot f^2}$$
+%\section{Ambient Light Baseline}
+\section{Wavelength Intensity}
+
+The raw data obtained from the camera provides us with the three values in the
+R,G,B channels per pixel (see mathemtica for example). Given a specific wavelength, $ \lambda$, we want to obtain the
+\underline{intensity} at that wavelenth.
+
+\subsection{Spectral Sensitivity Function}
+
+Given constant ISO and aperture, at each wavelenth, $ \lambda$, the spectral sensitivity
+in RGB channels is calculated by
+$$ c(\lambda) = \frac{d(\lambda)}{r(\lambda) t(\lambda)} $$
+where, $ r(\lambda)$ is the radiance. $t(\lambda) $ is the exposure time.
+$d(\lambda)$ is the data.
+
+Therefore rdiance at a wavelength would be,
+
+$$ r(\lambda) = \frac{d(\lambda)}{c(\lambda)t'(\lambda, f)} $$
+
+with $t'(\lambda) $ is a function of the wavelength and aperture as well.
 \section{Experiment}
 
 \subsection{Set Up}
