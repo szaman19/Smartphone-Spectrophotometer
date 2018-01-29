@@ -183,19 +183,44 @@ The light incident on the camera is therefore,
   \frac{\rho_D}{\pi}  L_{s 663} 10^\frac{-2\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
 \end{align}
 \subsection{Analytic Solution}
-Equation (10) can be solved analytically for a light source which is at angle $\theta_0$ to $ \theta_{c}$.
+\subsubsection{At High Cutoff Angles}
+At high cutoff angles $ \theta_c > 60 \degree$, we can reasonably account for reflectance off
+of the water surface to be sufficiently low $ (\leq 3\%)$. The correction to the incident is
+sufficiently low and can be discounted.
+
+Equation (10) can be solved analytically to the first order approximation of the taylor expansion of
+$10^{\frac{-\epsilon dC}{cos(\theta_i)}}$, for a light source which is at angle $\theta_0$ to $ \theta_{c}$.
 The concentration of the chlorophyll, c, can be retrieved by,
 \begin{align}
   C &= Log_{10}\left [ \int_{\theta_0}^{\theta_c} \int_{0}^{2\pi}
-        \frac{\rho_D}{\pi} \frac{L_{s 663}} {L_{i 663}} 10^\frac{-2\epsilon d}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i\right]
-    \\ &= Log_{10}\left[2 \rho_D \frac{L_{s 663}} {L_{i 663}} 10^{-2\epsilon d}\int_{\theta_0}^{\theta_c} 10^\frac{1 }{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i\right]
-    \\ &= Log_{10}\left[2 \rho_D \frac{L_{s 663}} {L_{i 663}} 10^{-2\epsilon d} \left( \left. \frac{-ln(10)cos(\theta_i)+1}{ln^2(10)10^{cos(\theta_i)}}\right\rvert^{\theta_c}_{\theta_0}\right)\right]
+        \frac{\rho_D}{\pi} \frac{L_{s 663}} {L_{i 663}} 10^{-2\epsilon d}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i\right]
+    \\ &= Log_{10}\left[2 \rho_D  10^{-2\epsilon d}\frac{L_{s 663}} {L_{i 663}}\int_{\theta_0}^{\theta_c}cos(\theta_i)sin(\theta_i)d\theta_i\right]
+    \\ &= Log_{10}\left[2 \rho_D  10^{-2\epsilon d}\frac{L_{s 663}} {L_{i 663}} \left( \left. \frac{-cos(2\theta_i)}{4} \right\rvert^{\theta_c}_{\theta_0}\right)\right]
 \end{align}
 
 In this case, $ \theta_c$ is less than the $ \frac{\pi}{3}$ so we can assume the
 difference transmitted intensity is the same as the incident atmospheric intensity. The addition
 of higher incident angles would make equation unsolvable analytically
 (But I believe we can approximate using perturbation theory).
+
+% \subsubsection{High Reflectance}
+%
+% We can
+
+
+\subsection{Possible Concerns}
+
+\begin{itemize}
+  \item The issues with non-constant air-water interface (waves) is that both the incident
+  light intenstiy and reflected light intensity can very dramatically over the the
+  surface of the secchi disk and result in patches of high reflectance and distorted disk
+  image. Imposing a periodic boundary condition, by defining the water surface as a plane
+  wave could be a better approximation. There would be a significant increase in calculation
+  complexity in that case.
+  \item Another siginificant ommitance is back scattering from the reflected light, being reflected
+  back onto the disk. (For an approximation, I believe the correction due to this would be
+  marginal, but I have to carry out a sample calculation to have a concrete value).
+\end{itemize}
 
 \section{Sensor Baseline}
 
@@ -277,7 +302,10 @@ concentration and intensity ratio ($ \frac{L_{r663}}{L_{i663}}$).
 
 The simulations were carried out with numerical approximations in mathemtica and the cutoff angle angle used was $ \frac{\pi}{2.1}$.
 ($\frac{\pi}{2}$ creates a discontinuity in the integrand)
-
+\section{Appendix}
+\subsection{Concentration Function calculation}
+The taylor expansion of $ 10^{\frac{-2d\epsilon C}{cos(\theta)}}$ is given by
+$$ 10^{\frac{-2d\epsilon C}{ cos(\theta)}} = 10^{-2d\epsilon C} - \left(2^{-2d\epsilon C} 5^{-2d\epsilon C}d\epsilon C\right)x^2ln(10)+O(n^3)$$
 \section{Notes/Definitions}
 
 \textbf{Radiance:} Radiant power per unit foreshortened area per unit solid angle. "throuput for light given point in a given direction" [3]
@@ -285,6 +313,7 @@ The simulations were carried out with numerical approximations in mathemtica and
 \textbf{Irradiance:} Incident power per unit area. (Light incident on surface or point)
 \newline
 \textbf{Bidirectional Reflectance Distribution Function (BRDF):} The ratio of irradiance and radiance on a surface.
+
 
 
 \section{References}
@@ -296,5 +325,6 @@ ISSN 0006-3002, https://doi.org/10.1016/0006-3002(63)90617-6. \newline
 [2] https://www.cs.princeton.edu/~smr/cs348c-97/surveypaper.html \newline
 [3] https://www2.cs.arizona.edu/classes/cs433/fall08/lectures/BRDFandGlobalIllum.pdf
 \newline
-[4] Beer-Lambert Law (http://life.nthu.edu.tw/~labcjw/BioPhyChem/Spectroscopy/beerslaw.htm)
+[4] Beer-Lambert Law (http://life.nthu.edu.tw/~labcjw/BioPhyChem/Spectroscopy/beerslaw.htm) \newline
+% [5] Incomplete Gamma Function (http://people.math.sfu.ca/~cbm/aands/page_260.htm)
 \end{document}
