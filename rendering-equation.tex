@@ -16,6 +16,7 @@
 \usepackage{getfiledate}
 \usepackage{wrapfig}
 \usepackage{gensymb}
+\usepackage{hyperref}
 
 \graphicspath{ {/} }
 \usepackage[hmargin=3.5cm,vmargin=2.5cm]{geometry}
@@ -198,6 +199,12 @@ The concentration of the chlorophyll, c, can be retrieved by,
     \\ &= Log_{10}\left[2 \rho_D  10^{-2\epsilon d}\frac{L_{s 663}} {L_{i 663}} \left( \left. \frac{-cos(2\theta_i)}{4} \right\rvert^{\theta_c}_{\theta_0}\right)\right]
 \end{align}
 
+Notice that as $d \leftarrow 0 $ the equation reduces to a function of incident angle and properties
+of the material and will correspond to the concentration $ C \leftarrow 0 $. The coupling
+of $ \epsilon$ and $d$ also shows that in a particulate free medium $(\epsilon = 0)$, the
+reflectance is affected by the depth $ d$ and is analogous to the case where $ d = 0$ for
+any depth.
+
 In this case, $ \theta_c$ is less than the $ \frac{\pi}{3}$ so we can assume the
 difference transmitted intensity is the same as the incident atmospheric intensity. The addition
 of higher incident angles would make equation unsolvable analytically
@@ -325,6 +332,6 @@ ISSN 0006-3002, https://doi.org/10.1016/0006-3002(63)90617-6. \newline
 [2] https://www.cs.princeton.edu/~smr/cs348c-97/surveypaper.html \newline
 [3] https://www2.cs.arizona.edu/classes/cs433/fall08/lectures/BRDFandGlobalIllum.pdf
 \newline
-[4] Beer-Lambert Law (http://life.nthu.edu.tw/~labcjw/BioPhyChem/Spectroscopy/beerslaw.htm) \newline
-% [5] Incomplete Gamma Function (http://people.math.sfu.ca/~cbm/aands/page_260.htm)
+[4] Beer-Lambert Law (\url{http://life.nthu.edu.tw/~labcjw/BioPhyChem/Spectroscopy/beerslaw.htm}) \newline
+[5] Incomplete Gamma Function (\url{http://people.math.sfu.ca/~cbm/aands/page_260.htm})
 \end{document}
