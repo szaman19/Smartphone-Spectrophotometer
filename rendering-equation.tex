@@ -311,8 +311,37 @@ The simulations were carried out with numerical approximations in mathemtica and
 ($\frac{\pi}{2}$ creates a discontinuity in the integrand)
 \section{Appendix}
 \subsection{Concentration Function calculation}
-The taylor expansion of $ 10^{\frac{-2d\epsilon C}{cos(\theta)}}$ is given by
-$$ 10^{\frac{-2d\epsilon C}{ cos(\theta)}} = 10^{-2d\epsilon C} - \left(2^{-2d\epsilon C} 5^{-2d\epsilon C}d\epsilon C\right)x^2ln(10)+O(n^3)$$
+The taylor expansion of $ 10^{\frac{-2\epsilon d C}{cos(\theta)}}$ is given by
+$$ 10^{\frac{-2\epsilon d C}{ cos(\theta)}} = 10^{-2\epsilon d C} - 10^{-2\epsilon d C}\epsilon d C x^2ln(10)$$
+We can use the taylor expantion to solve for rendering equation analytically up to the second order,
+\begin{align*}
+  L_{i 663} &= \int^{2\pi}_{\phi_i = 0}\int^{\theta_c}_{\theta_i = 0}
+  \frac{\rho_D}{\pi}  L_{s 663} 10^\frac{-2\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
+      \\    &=  \int^{2\pi}_{\phi_i = 0}\int^{\theta_c}_{\theta_i = 0}
+      \frac{\rho_D}{\pi}  L_{s 663}\left(10^{-2\epsilon d C} - 10^{-2\epsilon d C}\epsilon d C \theta_i^2ln(10)\right)
+      cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
+      \\    &= \int^{\theta_c}_{\theta_i = 0}
+      2\rho_D  L_{s 663}\left(10^{-2\epsilon d C} - 10^{-2\epsilon d C}\epsilon d C \theta_i^2ln(10)\right)
+      cos(\theta_i)sin(\theta_i)d\theta_i
+      \\ &= 2\rho_D  L_{s 663}10^{-2\epsilon d C} \left(
+      \int^{\theta_c}_{\theta_i = 0}cos(\theta_i)sin(\theta_i)d\theta_i-\epsilon d C ln(10)\int^{\theta_c}_{\theta_i = 0} \theta_i^2 cos(\theta_i)sin(\theta_i)d\theta_i
+      \right)
+      \\&= 2\rho_D  L_{s 663}10^{-2\epsilon d C} \left(\left. \frac{-\cos^2(\theta_i)}{2}\right \rvert^{\theta_c}_{\theta_0} - \left.
+      \left(\epsilon d C ln(10)\right)\frac{2\theta_i\sin\left(2\theta_i\right)+\left(1-2\theta_i^2\right)\cos\left(2\theta_i\right)}{8} \right \rvert^{\theta_c}_{\theta_0}
+      \right)
+\end{align*}
+We can solve for the concentration analytically as well.
+\begin{align*}
+L_{i 663} = 2\rho_D  L_{s 663}10^{-2\epsilon d C} (k - Cq)
+\end{align*}
+
+\begin{align*}
+\frac{L_{i 663} 10^{2\epsilon d}}{2\rho_D  L_{s 663}} &= 10^{-C}(k - Cq)\\
+ln \left( \frac{L_{i 663} 10^{2\epsilon d} }{2\rho_D  L_{s 663}} \right ) &= C\cdot ln(10^{-1})+ln(k - Cq) \\
+ln \left( \frac{L_{i 663} 10^{2\epsilon d} }{2\rho_D  L_{s 663}} \right ) +k -1 &= C \\
+\frac{ln \left( \frac{L_{i 663} 10^{2\epsilon d} }{2\rho_D  L_{s 663}} \right ) +k -1}{q - ln(10)} &= C
+\end{align*}
+
 \section{Notes/Definitions}
 
 \textbf{Radiance:} Radiant power per unit foreshortened area per unit solid angle. "throuput for light given point in a given direction" [3]
