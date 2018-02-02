@@ -183,7 +183,7 @@ The light incident on the camera is therefore,
   L_{i 663} = \int^{2\pi}_{\phi_i = 0}\int^{\theta_c}_{\theta_i = 0}
   \frac{\rho_D}{\pi}  L_{s 663} 10^\frac{-2\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
 \end{align}
-\subsection{Analytic Solution}
+\subsection{Analytical Solution}
 \subsubsection{At High Cutoff Angles}
 At high cutoff angles $ \theta_c > 60 \degree$, we can reasonably account for reflectance off
 of the water surface to be sufficiently low $ (\leq 3\%)$. The correction to the incident is
@@ -193,14 +193,14 @@ Equation (10) can be solved analytically to the first order approximation of the
 $10^{\frac{-\epsilon dC}{cos(\theta_i)}}$, for a light source which is at angle $\theta_0$ to $ \theta_{c}$.
 The concentration of the chlorophyll, c, can be retrieved by,
 \begin{align}
-  C &= Log_{10}\left [ \int_{\theta_0}^{\theta_c} \int_{0}^{2\pi}
-        \frac{\rho_D}{\pi} \frac{L_{s 663}} {L_{i 663}} 10^{-2\epsilon d}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i\right]
-    \\ &= Log_{10}\left[2 \rho_D  10^{-2\epsilon d}\frac{L_{s 663}} {L_{i 663}}\int_{\theta_0}^{\theta_c}cos(\theta_i)sin(\theta_i)d\theta_i\right]
-    \\ &= Log_{10}\left[2 \rho_D  10^{-2\epsilon d}\frac{L_{s 663}} {L_{i 663}} \left( \left. \frac{-cos(2\theta_i)}{4} \right\rvert^{\theta_c}_{\theta_0}\right)\right]
+  C &= \frac{ln \left (\frac{L_{i663}}{2\rho_dL_{s663} \left(\left. \frac{\cos^2(\theta_i)}{2} \right \rvert_{\theta_0}^{\theta_c}\right) } \right)}{\epsilon d ln(10^{-2})}
 \end{align}
 
-Notice that as $d \leftarrow 0 $ the equation reduces to a function of incident angle and properties
-of the material and will correspond to the concentration $ C \leftarrow 0 $. The coupling
+\begin{center}
+  \includegraphics[scale=.60]{FirstOrderConcentration.jpg}
+\end{center}
+Notice that as $d \rightarrow 0 $ the equation reduces to a function of incident angle and properties
+of the material and will correspond to the concentration $ C \rightarrow 0 $. The coupling
 of $ \epsilon$ and $d$ also shows that in a particulate free medium $(\epsilon = 0)$, the
 reflectance is affected by the depth $ d$ and is analogous to the case where $ d = 0$ for
 any depth.
@@ -209,6 +209,16 @@ In this case, $ \theta_c$ is less than the $ \frac{\pi}{3}$ so we can assume the
 difference transmitted intensity is the same as the incident atmospheric intensity. The addition
 of higher incident angles would make equation unsolvable analytically
 (But I believe we can approximate using perturbation theory).
+\subsection{Second Order approximation}
+(I'm still grappling with the math on this one)
+The Appendix has the math carried out but the last approximation is troubling me.
+
+\begin{center}
+\includegraphics[scale=.60]{SecondOrderConcentration.jpg}
+\end{center}
+
+
+
 
 % \subsubsection{High Reflectance}
 %
@@ -275,6 +285,16 @@ Therefore rdiance at a wavelength would be,
 $$ r(\lambda) = \frac{d(\lambda)}{c(\lambda)t'(\lambda, f)} $$
 
 with $t'(\lambda) $ is a function of the wavelength and aperture as well.
+
+\subsection{RGB Image Analysis}
+For a Lambartian diffuser, the theoretical digital value for each pixel, $ g_i$,
+\begin{align}
+  g_i = \alpha_i
+  \left[\int_{\lambda}I_{\lambda}\rho_d L_{r}F_{i\lambda}C_{\lambda} d\lambda\right]^{\gamma_{i}} + \beta_{i}
+\end{align}
+where i = {Red, Green, Blue}.
+
+
 \section{Experiment}
 
 \subsection{Set Up}
@@ -341,6 +361,7 @@ ln \left( \frac{L_{i 663} }{2\rho_D  L_{s 663}} \right ) &= \epsilon d C\cdot ln
 ln \left( \frac{L_{i 663} }{2\rho_D  L_{s 663}} \right ) +k -1 &= C \\
 \frac{ln \left( \frac{L_{i 663} 10^{2\epsilon d} }{2\rho_D  L_{s 663}} \right ) +k -1}{q - ln(10)} &= C
 \end{align*}
+
 
 \section{Notes/Definitions}
 
