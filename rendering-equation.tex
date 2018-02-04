@@ -217,14 +217,6 @@ The Appendix has the math carried out but the last approximation is troubling me
 \includegraphics[scale=.60]{SecondOrderConcentration.jpg}
 \end{center}
 
-
-
-
-% \subsubsection{High Reflectance}
-%
-% We can
-
-
 \subsection{Possible Concerns}
 
 \begin{itemize}
@@ -287,13 +279,31 @@ $$ r(\lambda) = \frac{d(\lambda)}{c(\lambda)t'(\lambda, f)} $$
 with $t'(\lambda) $ is a function of the wavelength and aperture as well.
 
 \subsection{RGB Image Analysis}
-For a Lambartian diffuser, the theoretical digital value for each pixel, $ g_i$,
+For a Lambartian diffuser, the most general theoretical digital value for each pixel, $ g_i$,
+
 \begin{align}
   g_i = \alpha_i
-  \left[\int_{\lambda}I_{\lambda}\rho_d L_{r}F_{i\lambda}C_{\lambda} d\lambda\right]^{\gamma_{i}} + \beta_{i}
+  \left[\int_{\lambda}I_{\lambda}O_{\lambda} L_{r}F_{i\lambda}C_{\lambda} d\lambda\right]^{\gamma_{i}} + \beta_{i}
 \end{align}
-where i = {Red, Green, Blue}.
+where i = {Red, Green, Blue}. $O_{\lambda}$ is the spectral reflectance of the object (in our case the secchi disk),
+$C_{\lambda}$ is the spectral sensitivity of the image sensor at the particular wavelength.
+$F_{\lambda}$ is the spectral transmittance of the color filters. $ \gamma_i$ is the gamma
+correction done by each channel and $ \beta_{i}$ is the error factor due to dark current
 
+If no processing is done by the camera electronics during the photo we can set
+$ \gamma_i = \alpha_i = F_{i\lambda} =1$ we get the equation of the form,
+
+\begin{align}
+  g_i = \int_{\lambda} I_{\lambda}O_{\lambda} L_{r}C_{\lambda} d\lambda +O(\text{error})
+\end{align}
+
+Without post-processig the pixel value is given by
+$$ g _i$$
+The incident light on the seonsor for any wevalength is given by, $I_{\lambda} O_{\lambda} L$.
+
+The spectral response of the seons $ C_\lambda$ is non-linear not readily available.
+If we consider corresponding picels of images of unsubmerged and submerged Secchi
+diskds, $ g$ and $g^\`$, we can obtain the relative inensities.
 
 \section{Experiment}
 
@@ -350,7 +360,7 @@ We can use the taylor expantion to solve for rendering equation analytically up 
       \left(\epsilon d C ln(10)\right)\frac{2\theta_i\sin\left(2\theta_i\right)+\left(1-2\theta_i^2\right)\cos\left(2\theta_i\right)}{8} \right \rvert^{\theta_c}_{\theta_0}
       \right)
 \end{align*}
-We can solve for the concentration analytically as well.
+Defining the angular constats as k and q, we can approximate the Concentration function to the second order,
 \begin{align*}
 L_{i 663} = 2\rho_D  L_{s 663}10^{-2\epsilon d C} (k - Cq)
 \end{align*}
@@ -370,6 +380,7 @@ ln \left( \frac{L_{i 663} }{2\rho_D  L_{s 663}} \right ) +k -1 &= C \\
 \textbf{Irradiance:} Incident power per unit area. (Light incident on surface or point)
 \newline
 \textbf{Bidirectional Reflectance Distribution Function (BRDF):} The ratio of irradiance and radiance on a surface.
+\textbf{Dark Current:} Residual current on camera sensor without any incident light. (related to degradation of sensor possibly?)
 
 
 
