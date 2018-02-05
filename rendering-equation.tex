@@ -213,6 +213,8 @@ of higher incident angles would make equation unsolvable analytically
 (I'm still grappling with the math on this one)
 The Appendix has the math carried out but the last approximation is troubling me.
 
+The orange line is the correction to the first order approximation in the concentraiton
+function. The end points behave as expected.
 \begin{center}
 \includegraphics[scale=.60]{SecondOrderConcentration.jpg}
 \end{center}
@@ -297,9 +299,15 @@ $ \gamma_i = \alpha_i = F_{i\lambda} =1$ we get the equation of the form,
   g_i = \int_{\lambda} I_{\lambda}O_{\lambda} L_{r}C_{\lambda} d\lambda +O(\text{error})
 \end{align}
 
-Without post-processig the pixel value is given by
-$$ g _i$$
 The incident light on the seonsor for any wevalength is given by, $I_{\lambda} O_{\lambda} L$.
+
+Without post-processig the pixel value of each color channel after submerging the disk is given by
+\begin{align}
+    g_i = \int_{\lambda} I_{\lambda}O_{\lambda} L^{`}_{r}C_{\lambda} d\lambda +O(\text{error})
+\end{align}
+
+We notice that the only value that changes is the attentuation function relating Incident intenisty
+and light absorption.
 
 The spectral response of the seons $ C_\lambda$ is non-linear not readily available.
 If we consider corresponding picels of images of unsubmerged and submerged Secchi
@@ -315,6 +323,8 @@ measured by the relative values in each color channel.
 Where, $ L^`_{s}$is the intensity of the light after submersion and $ L_{s}$ is the detected light before submersion.
 
 (Look at Appendix)
+
+\textbf{}
 \section{Experiment}
 
 \subsection{Set Up}
