@@ -1,0 +1,228 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{epsfig}
+\usepackage{epstopdf}
+\usepackage{titling}
+\usepackage{url}
+\usepackage{array}
+\usepackage{enumerate}
+\usepackage{ physics }
+\usepackage{graphicx}
+\usepackage{marginnote}
+\usepackage{getfiledate}
+\usepackage{wrapfig}
+\usepackage{gensymb}
+\usepackage{hyperref}
+\usepackage[font=small,labelfont=bf]{caption}
+\graphicspath{ {/} }
+\usepackage[hmargin=3.5cm,vmargin=2.5cm]{geometry}
+\title{Determining a Baseline for Consistent Image Analysis Across Smartphones}
+\author{Shehtab Zaman \\ Binghamton University}
+\date{\today}
+\begin{document}
+\maketitle
+\section{Aperture}
+
+To gather consistent data from different types of smartphone cameras, we must establish
+a baseline on be able to normalize pixel data. The varying focal lengths and
+f-number provide a challenge to make the data normalized.
+
+Consider a measurement done using a particular smartphone. The irradiance
+or incoming light would be calculated using the aperture area of the sensor.
+The irradiance is inversely proportional to the aperture area and thus inverse
+squarely proportional to the aperture diameter.
+
+The amount of light is also dependent on the light cone which is also
+proportional to the distance to the object. Assuming all the measurements are
+done at a constant distance, we can solely focus on the variance in the
+sensor aperture.
+
+The paraxial irradiance, $ I_C$ of an image is proportional to $I_c \propto \frac{D^2_A}{F^2} $,
+where $ D_A$ is the aperture diameter and $ F$ is the focal length of the sensor.
+
+The ratio of $ F$ and $ D_A$ is defined as the relative aperture and we can use it
+to relate different sensors with differing sensor focal lenghts.
+
+\subsection{Relative Aperture}
+
+The finite size of a lens limits the amount light it can collect at ny given time.
+Higher integration times (discussed later) offer linear responce up to a certain
+time (Schwarzchild Limit).
+
+The exposure depends on thing time t and the irradiance $ I_C$
+of the light falling onto a sensor location at the image plane C.
+The amount of fluc (photon lines) admitted into the sensor zone is propotional
+to the area of the aperture A and thefore the square of the diameter $ D_A$.
+
+A point O of an image is one apex
+of a solid angle cone whose base is the system aperture area. Therefore a larger
+diameter increases the base of the flux cone and increases the amount of flux wihin the cone
+collected by the lens.
+
+Since a higher focal length also increases the length of
+the cone and therefore decreases the incoming flux, we can define $ f_{\#}$ as the f-number
+to measure the relative aperture of the camera, where $ f_{\#} = \frac{D_A}{F}$.
+
+We can measure see that the irradiance is only a measure of this relative aperture accross all devices.
+
+\begin{center}
+  \includegraphics[scale=.60]{sensor_aperure_comparison.jpeg}
+\end{center}
+\captionof{figure}{From, Image Acquisition: Handbook of machine vision engineering:, Volume 1 by M.W. Burke,
+Effect of aperture in differing systems.}
+
+
+In image (28.A) we see that sensors with the same focal length, and thus the same magnification.
+The sensor with  $f_2$ relative aperture will have 16 times the incoming light flux and therefore,
+brightness compared to $f_8$.
+
+In (28.B) we have sensors with different focal lengths and therefore different magnifications.
+Due to the larger focal length, the image must be placed further away from the 8" focal length sensor.
+Due to the change in distance, the incident light flux and brightness is again only due to
+the relative aperture. In this case, the sensor with $ f_2$ will have 4 times the incoming light flux
+and brightnesss compared to $ f_4$
+
+\section{Image Sensor}
+
+\subsection{Introduction}
+
+A key factor in consistent image analysis with images from different devices
+and therefore different image sensors is the metrics of the sensor themselves.
+Image sensors are generally built upon silicon diodes. The energy bandgap
+of silicon 1.1 eV is very well suited for the capturing visible light spectrum (45o nm -650nm), which
+have the photon energies of 2.75eV to 1.9eV. The current line up of smartphones almost universally imply CMOS
+ (complementary metal oxide semiconductors) architecture.
+
+
+\subsection{Integration Time or Shutter Speed}
+
+The measure of light hitting the sensor, we must measure the current generated
+by the photon hitting the sensor. The output voltage measured by the photodiode,
+is given by,
+
+\begin{equation}
+  V_{\text{out}} = V_{\text{photo}} - \frac{i_{\text{photo}}t_{\text{int}}}{C_{D}}[1]
+\end{equation}
+$V_{\text{out}}$ is the output voltage and $V_{\text{photo}} $ is a known
+potential to aid in voltage detection.
+$ i_{\text{photo}}$ is the photocurrent, $t_{\text{int}}$ is the integration time,
+and $C_D $ is the capacitance of the photodiode.
+
+The capacitance and current are usually in the same order (femto), so the integration
+time $ t_{\text{int}}$ is linearly proportional to the voltage measured. The integration
+time is related to the shutter speed and at faster speeds we have the linear relationship
+with intensity. To normalize intensity captured across devices, we can define a model
+integration time, $ t_0$ and say,
+
+\begin{equation}
+  I \propto \frac{T}{T_0}
+\end{equation}
+where, T is the integration time or shutter speed used for the image.
+
+\subsection{Pixel Metrics}
+Image sensors essentially convert photons to charges. The variance in the
+sensors ability to convert photons would cause a variance in the image measurement.
+
+The current generation from photons is not a fully efficient mechanism.
+The \textbf{Quantum Efficiency} measures the efficiency of photon conversion
+for particular wavelengths. In our particular case, the efficiency at wavelengths
+of high absorbance for chlorophyll and CDOM can be significantly different across
+devices. The amount of photons being being detected by the sensor would be essentially a
+linear function of the integration time or shutter speed and the efficiency at some
+wavelength. We can define a constant the efficiency, $ n_0$ for any wavelength between
+$ 0 \leq n_0 \leq 100$. So we can say that
+
+\begin{equation}
+  I \propto \frac{n_{\lambda}}{n_{0\lambda}}
+\end{equation}
+Where, $ n_{0\lambda}$ is our model efficiency and $n_{\lambda}$
+is the efficiency for a sensor at wavelength, $ \lambda$.
+
+
+
+\subsection{Pixel Size}
+
+The pixel size of
+\section{Smartphone comparisons}
+The overall light gathering capabilities of the sensor is defined by the ratio of the focal length
+to the effective aperture of the system. We define that as the f number of the system.
+We also have a variance in the sensor size and pixel size on various smartphones. The
+pixel size has a direct squared relationship with irradiance.
+
+We choose a baseline model smartphone with an Irradiance Factor (IF) of 1,
+The irradiance factor of a sensor is computed by the ratio of the Pixel size (PS) squared over
+the Aperutre/ F number squared.
+
+\begin{table}
+\begin{tabular}{||c c c c c c||}
+ \hline
+ Model & IS (MP) & Aperture & PS($\mu$m) & FL(mm) & IF\\ [0.5ex]
+ \hline\hline
+ Baseline                  & 12 &1.0& 1.00 & 35 &1 \\
+ Galaxy S8+                & 12 &1.7& 1.40 & 26 &0.68\\
+ iPhone 6S                 & 12 &2.2& 1.22 & 29 &0.31\\
+ iPhone 6S Plus            & 12 &2.2& 1.22 & 29 &0.31\\
+ iPhone 7                  & 12 &1.8& 1.22 & 28 &0.46\\
+ iPhone 7 Plus (WA)        & 12 &1.8& 1.22 & 28 &0.46\\
+ iPhone 7 Plus (Telephoto) & 12 &2.8& 1.00 & 56 &0.13\\
+ iphone 8                  & 12 &1.8& 1.22 & 28 &0.46\\[1ex]
+ \hline
+\end{tabular}
+\caption{Specifications and Irradiance factor for widely used smartphones}
+\label{table:1}
+\end{table}
+
+Given the IF, we can see the intensity of light collected by each sensor given the same
+environment and shutter speed.
+
+\begin{center}
+  \includegraphics[scale=.45]{normalized_irradiance.png}
+\end{center}
+
+We can thus transform the pixel data using the IF to obtain consisten data while using
+different cameras.
+\section{Further Notes}
+
+Up until this point, we have been considering resulting images that were exactly the same. That means
+we have been changing sensor positions from the image plane (distance from image), according to the
+sensor focal length to obtain identical images. Images taken from varying distances must be normalized
+by their relative magnification and therefore, we must establish a baseline magnificaiton value.
+
+
+\section{Related Works}
+
+\subsection{Smartphone Flourescence Spectroscopy}
+Yu, Tan, and Cunningham demonstrate a procedure to use smartphones for
+spectrophotometry of flourescence based biolological assays. Ther device
+involves a collecting lense and diffraction grating to "manually" seperate
+the incoming wavelength. Although their setup is designed for mobile lab use, and
+would not be applicable for field testing,the image analysis provides and result show
+the relative competence of smartphone cameras in detecting visible light for analysis.
+
+Image processing for the flourescence photospectrometer involved only a 850x180 band of pixel
+values from a incandescent lamp (150W halogen fiber-optic high intensity illuminator; Cole Parmer, IL, USA).
+Interestingly, they obsersved intensity fall offs at two particular wavelengtht, 510 nm (cyan) and 580 nm (yellow),
+even though the incandescent light should produce continuous intensity. A light
+source fed through a tube with a diffraction grating could serve as a quick tool to
+measure relative efficiencies of sensors.
+
+The image analysis after obtaining the diffracted images was done after the RGB values
+were transformed to Hue-Saturation-Value (HSV) to obtain photon intensities at
+particular wavelength bands. This could possibly be a good avenue to find intensities
+from RGB in our measurements (After some normalization of course).
+
+
+\url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.717.9937&rep=rep1&type=pdf}
+
+
+\section{References}
+[1] Fundamentals of Image Sensor Performance \url{http://www.cse.wustl.edu/~jain/cse567-11/ftp/imgsens/index.html#sec14}
+
+\subsection{smartphone specs}
+\url{https://techcrunch.com/2017/09/22/iphone-8-teardown-reveals-few-surprises-but-more-camera-details/}
+
+\end{document}
