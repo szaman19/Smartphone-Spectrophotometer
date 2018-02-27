@@ -28,7 +28,7 @@
 \section{Aperture}
 
 To gather consistent data from different types of smartphone cameras, we must establish
-a baseline on be able to normalize pixel data. The varying focal lengths and
+a baseline for the image intensity to be able to normalize pixel data. The varying focal lengths and
 f-number provide a challenge to make the data normalized.
 
 Consider a measurement done using a particular smartphone. The irradiance
@@ -49,7 +49,7 @@ to relate different sensors with differing sensor focal lenghts.
 
 \subsection{Relative Aperture}
 
-The finite size of a lens limits the amount light it can collect at ny given time.
+The finite size of a lens limits the amount of light it can collect at ny given time.
 Higher integration times (discussed later) offer linear responce up to a certain
 time (Schwarzchild Limit).
 
@@ -67,7 +67,7 @@ Since a higher focal length also increases the length of
 the cone and therefore decreases the incoming flux, we can define $ f_{\#}$ as the f-number
 to measure the relative aperture of the camera, where $ f_{\#} = \frac{D_A}{F}$.
 
-We can measure see that the irradiance is only a measure of this relative aperture accross all devices.
+We can see that the irradiance is only a measure of this relative aperture accross all devices.
 
 \begin{center}
   \includegraphics[scale=.60]{sensor_aperure_comparison.jpeg}
@@ -94,7 +94,9 @@ A key factor in consistent image analysis with images from different devices
 and therefore different image sensors is the metrics of the sensor themselves.
 Image sensors are generally built upon silicon diodes. The energy bandgap
 of silicon 1.1 eV is very well suited for the capturing visible light spectrum (45o nm -650nm), which
-have the photon energies of 2.75eV to 1.9eV. The current line up of smartphones almost universally imply CMOS
+have the photon energies of 2.75eV to 1.9eV. The current line up of smartphones almost universally imply
+Back-Side Illuminated (BSI)
+CMOS
  (complementary metal oxide semiconductors) architecture.
 
 
@@ -146,7 +148,10 @@ is the efficiency for a sensor at wavelength, $ \lambda$.
 
 \subsection{Pixel Size}
 
-The pixel size of
+The pixel size of a sensor referes to the physical single single absorbing photons. The
+larger the sensor size, the larger the pixel size and more light the pixel can absorb. The
+intensity of light absorbed is therefore proportional to the surface area covered by the pixel
+or the square of the pixel size..
 \section{Smartphone comparisons}
 The overall light gathering capabilities of the sensor is defined by the ratio of the focal length
 to the effective aperture of the system. We define that as the f number of the system.
@@ -155,7 +160,7 @@ pixel size has a direct squared relationship with irradiance.
 
 We choose a baseline model smartphone with an Irradiance Factor (IF) of 1,
 The irradiance factor of a sensor is computed by the ratio of the Pixel size (PS) squared over
-the Aperutre/ F number squared.
+the Aperutre/ F number squared. The focal length (FL) as discussed above, is included in the f-number.
 
 \begin{table}[h!]
 \centering
@@ -193,6 +198,11 @@ we have been changing sensor positions from the image plane (distance from image
 sensor focal length to obtain identical images. Images taken from varying distances must be normalized
 by their relative magnification and therefore, we must establish a baseline magnificaiton value.
 
+-Will add more smartphones for comparison.
+
+-Research ISO ranges and shutter speed ranges for various Smartphones
+
+-Most of the data is from third party so reliability is an issue.
 
 \section{Related Works}
 
@@ -206,7 +216,7 @@ the relative competence of smartphone cameras in detecting visible light for ana
 
 Image processing for the flourescence photospectrometer involved only a 850x180 band of pixel
 values from a incandescent lamp (150W halogen fiber-optic high intensity illuminator; Cole Parmer, IL, USA).
-Interestingly, they obsersved intensity fall offs at two particular wavelengtht, 510 nm (cyan) and 580 nm (yellow),
+Interestingly, they obsersved intensity fall offs at two particular wavelengths, 510 nm (cyan) and 580 nm (yellow),
 even though the incandescent light should produce continuous intensity. A light
 source fed through a tube with a diffraction grating could serve as a quick tool to
 measure relative efficiencies of sensors.
@@ -224,7 +234,11 @@ from RGB in our measurements (After some normalization of course).
 [1] Fundamentals of Image Sensor Performance \url{http://www.cse.wustl.edu/~jain/cse567-11/ftp/imgsens/index.html#sec14}
 
 [2] Image Acquisition: Handbook of machine vision engineering:, Volume 1, M.W. Burke.
+
+[3] Pixel Size \url{https://www.ephotozine.com/article/complete-guide-to-image-sensor-pixel-size-29652}
+
 \subsection{smartphone specs}
 \url{https://techcrunch.com/2017/09/22/iphone-8-teardown-reveals-few-surprises-but-more-camera-details/}
+\url{https://www.gsmarena.com/}
 
 \end{document}
