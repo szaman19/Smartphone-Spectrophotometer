@@ -11,10 +11,18 @@
 \usepackage{array}
 \usepackage{enumerate}
 \usepackage{ physics }
+\usepackage{graphicx}
+\usepackage{marginnote}
+\usepackage{getfiledate}
+\usepackage{wrapfig}
+\usepackage{gensymb}
+\usepackage{hyperref}
+\usepackage[font=small,labelfont=bf]{caption}
+\graphicspath{ {/} }
 \usepackage[hmargin=3.5cm,vmargin=2.5cm]{geometry}
-\title{Smartphone Spectrophotometer Notes}
+\title{WQ App Model}
 \author{Shehtab Zaman }
-\date{December 2017}
+\date{May 2018}
 
 \begin{document}
 \maketitle
@@ -33,38 +41,403 @@ The general outline of the procedure is as follows:
 \end{enumerate}
 
 % \section{Background}
-\section{Sensor Baseline}
+\section{Model}
+Given our inputs of submerged and unsubmerged disk images, a model for the concentration
+can be created using Fresnels Laws of reflections, Beer Lambert Law and the Rendering Equation.
+Due to the non-analytic nature of the inverted rendering equation, we must use an approximation technique
+to obtain the concentration. Here the taylor expansion to the first and  second order are obtained,
+but numerical approximation must prove to be more stable/accurate.
 
-\subsection{Compensating for Exposure}
+\subsection{Fresnels Reflection and Transmittance}
 
-\subsubsection{Aperture and Intensity}
+If we consider the intensity of the light detected by the sensor, $ L_{sensor}$, we can
+effectively decompose the sources into two components: the reflection off of the air-water
+interface (air-to-air) $L_{reflected}$, and a proportion of the reflectance off of
+the disk underwater, $K \cdot L_{transimitted}$. Where
+$ K$ is determined by Rendering equation as the concentration of particulates as a parameter.
 
-The aperture of, measured in f-stops, is the opening of the camera sensor. the
-f-stop measures the amount of sensors surface open to collect photons. Larger
-apertures create a smaller depth of field (should be considered when deciding on the baseline).
+Given the ambient atmospheric light intenstiy, $L_{atm}$, by energy considerations we can say
+$$L_{atm} = L_{reflected}+L_{transmitted}$$
 
-The intensity of the incident light is inversely proportional to the square of the
-f-number.
-$$ I \propto \frac{1}{f^2} $$
+\subsubsection{Reflectance}
+Since the incident light is unpolarized, the reflectance is given
+by the average of S-polarized and P-polarized light. As an approximation
+for a given incident angle $\theta$, we can use Schlick's approximation to obtain
+reflectance R.
+$$ R(\theta) = \left(\frac{n_1-n_2}{n_1+n_2}\right)^2 +
+ \left(1-\left(\frac{n_1-n_2}{n_1+n_2}\right)^2\right)\left(1-cos(\theta)\right)^5 $$
+where, $ n_1$ is the index of refraction of the incident media (air in our case)
+and $ n_2$ is the index of refracton of the reflected media (water = 1.33).
 
-\subsubsection{Shutter Speed and Intensity}
-We can assume that the shutter speed (how long the sensor collects photons), is inversely proportional
-to the measured intensity.
+Since the reflectance is wavelength independent, we have,
 
-$$ I \propto \frac{1}{T}$$
+$$ L_{reflected} = R \cdot L_{atm}$$
 
-\subsubsection{Pixel values}
+\subsubsection{Transmittance}
+\marginnote{In practice considering the reflection may be trivial as at $ \theta = 0$
+the maximum reflectance is $\approx 3\%$ and has a significant effect at higher incident
+angles only $(>60 \degree)$.}
 
-If the pixel value is an estimate of the power per solid angle per area of the sensor, we can combine the
-shutter speed and aperture relations as
+We can relate the transmittance $ T$ of the unpolarized light with
+the reflectance $ R$ as
+$$ T = 1 - R$$
 
-$$ I \propto \frac{1}{T \cdot f^2}$$
-%\section{Ambient Light Baseline}
-\section{Wavelength Intensity}
+We have the transmitted light into the water as,
+
+$$ L_{transmitted} = T \cdot L_{atm} $$
+
+The attenuation $ L_{transmitted}$ due to chlorophyll absoprtion and reflection
+on the disk is discussed in the following sections.
+
+
+
+\subsection{Rendering Equation}
+
+The interaction of incident, reflected, and emmited light at any given point on a
+given surface is
+described by the general Rendering Equation,
+
+\begin{equation}
+  L_o = L_e + L_r
+\end{equation}
+Where, $L_o$ is the light leaving the particular point, $ L_e$ is the light emitted
+from the point (if it is a source), and $L_r $ is the light reflected from that point.
+
+Since we will be working with non-light generating disks, we set,
+$ L_e = 0$.
+The light reflected off of the surface of a disk, can be calculated using the
+Bidirectional Reflectance Distribution Function (BRDF)[3].
+For a given point on a surface, the general BRDF is,
+
+\begin{equation}
+\rho_d(\phi_0, \theta_0,\phi_f, \theta_f)=\frac{L_r{\phi_f, \theta_f}}{L_I{\phi_0, \theta_0}}
+\end{equation}
+Where $\phi_0, \theta_0$ are the incident azimuthal and polar angle of the light source,
+and $\phi_f, \theta_0$ are the azimuthal and polar angle with respect to the viewer and
+and relfected point.
+
+From the general rendering equation, the reflected radiance is given by
+
+\begin{equation}
+  L_r = \int^{2\pi}_{\phi_i = 0}\int^{\frac{\pi}{2}}_{\theta_i = 0}
+  f_r L_s T(d)cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
+\end{equation}
+
+Where, the $ f_r$ is Lambertian BRDF.
+
+The transmission function $T(d)$ can be related to the depth of the reflecting
+surface.
+
+\subsection{Beer-Lambert Law}
+
+The Beer-Lambert provides us with a linear relationship betweem incident light, absorbed light,
+and concentration of absorbed light.
+
+The wavelength dependent relation is given as,
+
+\begin{equation}
+  \epsilon d c = Log_{10}{\frac{I_0}{I_f}}
+\end{equation}
+where, $\epsilon$ is the molar absorptivity in $ L \cdot cm^{-1} \cdot mol^{-1}$,
+$ d$ is the depth in $cm$, $ C$ is the concentration in $mol \cdot L^{-1} $. $ I_0$
+is the initial light intensity, and $ I_f$ is the final intensity after
+absorption.
+
+Given some incident light of radiance, $L_0$, on the water surface,
+
+we have the decomposed radiance as
+$$ L_0 = L_{sa} + L_{s}$$
+where, $ L_{sa}$ is the absorbed light radiation. $ L_{s}$ is the light
+incident on the point under water and being reflected by the disk.
+
+According to the Beer-Lambert Law we have the relation,
+
+\begin{equation}
+  Log_{10}\left(\frac{L_0}{L_{s}}\right) = \frac{\epsilon d C}{cos(\theta)}
+\end{equation}
+and,
+\begin{equation}
+  T(d) = 10^\frac{-\epsilon d C}{cos(\theta)}
+\end{equation}
+
+\subsection{Reflectance}
+
+Since we want to specifically take into account the
+absorbance due to chlorophyll a, we limit the consideration
+to considering the radiance of light at $\lambda = 662nm$
+
+Even though the incident light is poloychromatic, but since we are considering the specific wavelength
+and the incident light is so spread out, we can reasonably treat it as monochromatic. (?)
+
+The reflectance in the particular frequency then becomes,
+
+\begin{equation}
+  L_{r \lambda} = \int^{2\pi}_{\phi_i = 0}\int^{\theta_c}_{\theta_i = 0}
+  f_r L_{s\lambda} 10^\frac{-\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
+\end{equation}
+\marginnote{The cutoff angle should ideally vary with the azimuthal position of the sun, time of day and the lattitude of position.}
+Here we sum the incident angle upto some cutoff angle $\theta_c$, as the higher incident lights
+have negligible effect on the reflected light.
+
+
+We can further make an assumption that the secchi disk is perfectly matte with rotationally
+invariant reflectance. The Lambertian BRDF is thus,
+
+\begin{equation}
+  f_r = \frac{\rho_D}{\pi}
+\end{equation}
+Where, $ \rho_D$ is the albedo of the secchi disk with $ 0 \leq \rho_D \leq 1$
+Combining (4) and (5) we get the reflectance off of the surface of secchi disk as,
+
+\begin{equation}
+  L_{r \lambda} = \int^{2\pi}_{\phi_i = 0}\int^{\theta_c}_{\theta_i = 0}
+  \frac{\rho_D}{\pi} L_{s\lambda} 10^\frac{-\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
+\end{equation}
+
+Chlorophyll a has an extinction coefficient of $ \epsilon_{663} = 0.088 \frac{cm^{-1}}{g}$ at 663nm.
+Since the light collected by the camera will have had to travel up the water column we must add
+another absorbance factor determined by the equation 2.
+
+The light incident on the camera is therefore,
+\begin{align}
+  L_{i 663} = \int^{2\pi}_{\phi_i = 0}\int^{\theta_c}_{\theta_i = 0}
+  \frac{\rho_D}{\pi}  L_{s 663} 10^\frac{-2\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
+\end{align}
+\subsection{Analytical Solution}
+\subsubsection{At High Cutoff Angles}
+At high cutoff angles $ \theta_c > 60 \degree$, we can reasonably account for reflectance off
+of the water surface to be sufficiently low $ (\leq 3\%)$. The correction to the incident is
+sufficiently low and can be discounted.
+
+Equation (10) can be solved analytically to the first order approximation of the taylor expansion of
+$10^{\frac{-\epsilon dC}{cos(\theta_i)}}$, for a light source which is at angle $\theta_0$ to $ \theta_{c}$.
+The concentration of the chlorophyll, c, can be retrieved by,
+\begin{align}
+  C &= \frac{ln \left (\frac{L_{i663}}{2\rho_dL_{s663} \left(\left. \frac{\cos^2(\theta_i)}{2} \right \rvert_{\theta_0}^{\theta_c}\right) } \right)}{\epsilon d ln(10^{-2})}
+\end{align}
+
+\begin{center}
+  \includegraphics[scale=.60]{FirstOrderConcentration.jpg}
+\end{center}
+Notice that as $d \rightarrow 0 $ the equation reduces to a function of incident angle and properties
+of the material and will correspond to the concentration $ C \rightarrow 0 $. The coupling
+of $ \epsilon$ and $d$ also shows that in a particulate free medium $(\epsilon = 0)$, the
+reflectance is affected by the depth $ d$ and is analogous to the case where $ d = 0$ for
+any depth.
+
+In this case, $ \theta_c$ is less than the $ \frac{\pi}{3}$ so we can assume the
+difference transmitted intensity is the same as the incident atmospheric intensity. The addition
+of higher incident angles would make equation unsolvable analytically
+(But I believe we can approximate using perturbation theory).
+\subsection{Second Order approximation}
+(I'm still grappling with the math on this one)
+The Appendix has the math carried out but the last approximation is troubling me.
+
+The orange line is the correction to the first order approximation in the concentraiton
+function. The end points behave as expected.
+\begin{center}
+\includegraphics[scale=.60]{SecondOrderConcentration.jpg}
+\end{center}
+
+\subsection{Possible Concerns}
+
+\begin{itemize}
+  \item The issues with non-constant air-water interface (waves) is that both the incident
+  light intenstiy and reflected light intensity can very dramatically over the the
+  surface of the secchi disk and result in patches of high reflectance and distorted disk
+  image. Imposing a periodic boundary condition, by defining the water surface as a plane
+  wave could be a better approximation. There would be a significant increase in calculation
+  complexity in that case.
+  \item Another siginificant ommitance is back scattering from the reflected light, being reflected
+  back onto the disk. (For an approximation, I believe the correction due to this would be
+  marginal, but I have to carry out a sample calculation to have a concrete value).
+\end{itemize}
+\section{Aperture}
+
+To gather consistent data from different types of smartphone cameras, we must establish
+a baseline for the image intensity to be able to normalize pixel data. The varying focal lengths and
+f-number provide a challenge to make the data normalized.
+
+Consider a measurement done using a particular smartphone. The irradiance
+or incoming light would be calculated using the aperture area of the sensor.
+The irradiance is inversely proportional to the aperture area and thus inverse
+squarely proportional to the aperture diameter.
+
+The amount of light is also dependent on the light cone which is also
+proportional to the distance to the object. Assuming all the measurements are
+done at a constant distance, we can solely focus on the variance in the
+sensor aperture.
+
+The paraxial irradiance, $ I_C$ of an image is proportional to $I_c \propto \frac{D^2_A}{F^2} $,
+where $ D_A$ is the aperture diameter and $ F$ is the focal length of the sensor.
+
+The ratio of $ F$ and $ D_A$ is defined as the relative aperture and we can use it
+to relate different sensors with differing sensor focal lenghts.
+
+\subsection{Relative Aperture}
+
+The finite size of a lens limits the amount of light it can collect at ny given time.
+Higher integration times (discussed later) offer linear responce up to a certain
+time (Schwarzchild Limit).
+
+The exposure depends on thing time t and the irradiance $ I_C$
+of the light falling onto a sensor location at the image plane C.
+The amount of fluc (photon lines) admitted into the sensor zone is propotional
+to the area of the aperture A and thefore the square of the diameter $ D_A$.
+
+A point O of an image is one apex
+of a solid angle cone whose base is the system aperture area. Therefore a larger
+diameter increases the base of the flux cone and increases the amount of flux wihin the cone
+collected by the lens.
+
+Since a higher focal length also increases the length of
+the cone and therefore decreases the incoming flux, we can define $ f_{\#}$ as the f-number
+to measure the relative aperture of the camera, where $ f_{\#} = \frac{D_A}{F}$.
+
+We can see that the irradiance is only a measure of this relative aperture accross all devices.
+
+\begin{center}
+  \includegraphics[scale=.60]{sensor_aperure_comparison.jpeg}
+\end{center}
+\captionof{figure}{From, Image Acquisition: Handbook of machine vision engineering:, Volume 1 by M.W. Burke,
+Effect of aperture in differing systems.}
+
+
+In image (28.A) we see that sensors with the same focal length, and thus the same magnification.
+The sensor with  $f_2$ relative aperture will have 16 times the incoming light flux and therefore,
+brightness compared to $f_8$.
+
+In (28.B) we have sensors with different focal lengths and therefore different magnifications.
+Due to the larger focal length, the image must be placed further away from the 8" focal length sensor.
+Due to the change in distance, the incident light flux and brightness is again only due to
+the relative aperture. In this case, the sensor with $ f_2$ will have 4 times the incoming light flux
+and brightnesss compared to $ f_4$
+
+\section{Image Sensor}
+
+
+A key factor in consistent image analysis with images from different devices
+and therefore different image sensors is the metrics of the sensor themselves.
+Image sensors are generally built upon silicon diodes. The energy bandgap
+of silicon 1.1 eV is very well suited for the capturing visible light spectrum (45o nm -650nm), which
+have the photon energies of 2.75eV to 1.9eV. The current line up of smartphones almost universally imply
+Back-Side Illuminated (BSI)
+CMOS
+ (complementary metal oxide semiconductors) architecture.
+
+
+\subsection{Integration Time or Shutter Speed}
+
+The measure of light hitting the sensor, we must measure the current generated
+by the photon hitting the sensor. The output voltage measured by the photodiode,
+is given by,
+
+\begin{equation}
+  V_{\text{out}} = V_{\text{photo}} - \frac{i_{\text{photo}}t_{\text{int}}}{C_{D}}[1]
+\end{equation}
+$V_{\text{out}}$ is the output voltage and $V_{\text{photo}} $ is a known
+potential to aid in voltage detection.
+$ i_{\text{photo}}$ is the photocurrent, $t_{\text{int}}$ is the integration time,
+and $C_D $ is the capacitance of the photodiode.
+
+The capacitance and current are usually in the same order (femto), so the integration
+time $ t_{\text{int}}$ is linearly proportional to the voltage measured. The integration
+time is related to the shutter speed and at faster speeds we have the linear relationship
+with intensity. To normalize intensity captured across devices, we can define a model
+integration time, $ t_0$ and say,
+
+\begin{equation}
+  I \propto \frac{T}{T_0}
+\end{equation}
+where, T is the integration time or shutter speed used for the image.
+
+\subsection{Pixel Metrics}
+Image sensors essentially convert photons to charges. The variance in the
+sensors ability to convert photons would cause a variance in the image measurement.
+
+The current generation from photons is not a fully efficient mechanism.
+The \textbf{Quantum Efficiency} measures the efficiency of photon conversion
+for particular wavelengths. In our particular case, the efficiency at wavelengths
+of high absorbance for chlorophyll and CDOM can be significantly different across
+devices. The amount of photons being being detected by the sensor would be essentially a
+linear function of the integration time or shutter speed and the efficiency at some
+wavelength. We can define a constant the efficiency, $ n_0$ for any wavelength between
+$ 0 \leq n_0 \leq 100$. So we can say that
+
+\begin{equation}
+  I \propto \frac{n_{\lambda}}{n_{0\lambda}}
+\end{equation}
+Where, $ n_{0\lambda}$ is our model efficiency and $n_{\lambda}$
+is the efficiency for a sensor at wavelength, $ \lambda$.
+
+
+
+\subsection{Pixel Size}
+
+The pixel size of a sensor referes to the physical single single absorbing photons. The
+larger the sensor size, the larger the pixel size and more light the pixel can absorb. The
+intensity of light absorbed is therefore proportional to the surface area covered by the pixel
+or the square of the pixel size..
+\section{Smartphone comparisons}
+The overall light gathering capabilities of the sensor is defined by the ratio of the focal length
+to the effective aperture of the system. We define that as the f number of the system.
+We also have a variance in the sensor size and pixel size on various smartphones. The
+pixel size has a direct squared relationship with irradiance.
+
+We choose a baseline model smartphone with an Irradiance Factor (IF) of 1,
+The irradiance factor of a sensor is computed by the ratio of the Pixel size (PS) squared over
+the Aperutre/ F number squared. The focal length (FL) as discussed above, is included in the f-number.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{||c c c c c c||}
+ \hline
+ Model & IS (MP) & Aperture & PS($\mu$m) & FL(mm) & IF\\ [0.5ex]
+ \hline\hline
+ Baseline                  & 12 &1.0& 1.00 & 35 &1 \\
+ Galaxy S8+                & 12 &1.7& 1.40 & 26 &0.68\\
+ iPhone 6S                 & 12 &2.2& 1.22 & 29 &0.31\\
+ iPhone 6S Plus            & 12 &2.2& 1.22 & 29 &0.31\\
+ iPhone 7                  & 12 &1.8& 1.22 & 28 &0.46\\
+ iPhone 7 Plus (WA)        & 12 &1.8& 1.22 & 28 &0.46\\
+ iPhone 7 Plus (Telephoto) & 12 &2.8& 1.00 & 56 &0.13\\
+ iphone 8                  & 12 &1.8& 1.22 & 28 &0.46\\[1ex]
+ \hline
+\end{tabular}
+\caption{Specifications and Irradiance factor for widely used smartphones}
+\label{table:1}
+\end{table}
+
+Given the IF, we can see the intensity of light collected by each sensor given the same
+environment and shutter speed.
+
+\begin{center}
+  \includegraphics[scale=.45]{normalized_irradiance.png}
+\end{center}
+
+We can thus transform the pixel data using the IF to obtain consisten data while using
+different cameras.
+\section{Further Notes}
+
+Up until this point, we have been considering resulting images that were exactly the same. That means
+we have been changing sensor positions from the image plane (distance from image), according to the
+sensor focal length to obtain identical images. Images taken from varying distances must be normalized
+by their relative magnification and therefore, we must establish a baseline magnificaiton value.
+
+-Will add more smartphones for comparison.
+
+-Research ISO ranges and shutter speed ranges for various Smartphones
+
+-Most of the data is from third party so reliability is an issue.
+
+\section{Image Analysis}
 
 The raw data obtained from the camera provides us with the three values in the
-R,G,B channels per pixel (see mathemtica for example). Given a specific wavelength, $ \lambda$, we want to obtain the
+R,G,B channels per pixel. Given a specific wavelength, $ \lambda$, we want to obtain the
 \underline{intensity} at that wavelenth.
+
+\textbf{This section depends highly on the extraction of pixels from images and further analysis of the pixels. It is quite vague
+and will require further work}
 
 \subsection{Spectral Sensitivity Function}
 
@@ -80,41 +453,139 @@ $$ r(\lambda) = \frac{d(\lambda)}{c(\lambda)t'(\lambda, f)} $$
 
 with $t'(\lambda) $ is a function of the wavelength and aperture as well.
 
-\section{Absorbance Model}
-\subsection{Lambertian BRDF}
-\subsubsection{Unsubmerged Secchi Disk Model}
+\subsection{RGB Image Analysis}
 
-Assuming a diffuse reflection and rotational symmetry of the
-secchi disk, we can assume the Lambertian BRDF to be
-as constant, with the form,
-\[
-f(\theta_i, \phi_i; \theta_r , \phi_r) = \frac{\rho_d}{\pi}
-\]
+For a Lambartian diffuser, the most general theoretical digital value for each pixel, $ g_i$,
 
-The $\rho_d$ is the albedo of the secchi disk.
+\begin{align}
+  g_i = \alpha_i
+  \left[\int_{\lambda}I_{\lambda}O_{\lambda} L_{r}F_{i\lambda}C_{\lambda} d\lambda\right]^{\gamma_{i}} + \beta_{i}
+\end{align}
+where i = {Red, Green, Blue}. $O_{\lambda}$ is the spectral reflectance of the object (in our case the secchi disk),
+$C_{\lambda}$ is the spectral sensitivity of the image sensor at the particular wavelength.
+$F_{\lambda}$ is the spectral transmittance of the color filters. $ \gamma_i$ is the gamma
+correction done by each channel and $ \beta_{i}$ is the error factor due to dark current
 
-Inside the water column with the assumption that the light source is normal to the surface,
-the surface radiance is then,
+If no processing is done by the camera electronics during the photo we can set
+$ \gamma_i = \alpha_i = F_{i\lambda} =1$ we get the equation of the form,
 
-\[
-L = \frac{\rho_d}{\pi} I_0
-\]
+\begin{align}
+  g_i = \int_{\lambda} I_{\lambda}O_{\lambda} L_{r}C_{\lambda} d\lambda +O(\text{error})
+\end{align}
 
-Where, $I_0$ is the intensity of the incident light.
+The incident light on the seonsor for any wevalength is given by, $I_{\lambda} O_{\lambda} L$.
 
-\subsubsection{Intensity as }
+Without post-processig the pixel value of each color channel after submerging the disk is given by
+\begin{align}
+    g_i = \int_{\lambda} I_{\lambda}O_{\lambda} L^{`}_{r}C_{\lambda} d\lambda +O(\text{error})
+\end{align}
+
+We notice that the only value that changes is the attentuation function relating Incident intenisty
+and light absorption.
+
+The spectral response of the seons $ C_\lambda$ is non-linear not readily available.
+If we consider corresponding picels of images of unsubmerged and submerged Secchi
+diskds, $ g$ and $g^`$, we can obtain the relative inensities.
+
+Given all other spectral corrections (absorption in other wavelenths especially) are taken into account,
+we can see that as an approximation we can say that the relative intensity due attentuation can be
+measured by the relative values in each color channel.
+\begin{align}
+\frac{g_i^`}{g_i} = \frac{L^`_{s}}{L_{s}}
+\end{align}
+
+Where, $ L^`_{s}$is the intensity of the light after submersion and $ L_{s}$ is the detected light before submersion.
+
+(Look at Appendix)
+
+\textbf{Notes: }
+\begin{itemize}
+  \item The integral over the sensor spectral response is essentially a sum over discretized wavelength
+  points. So we can do the cancellations for unabsorbed wavelenghts.
+  \item The assumption that there is minimal absoprtion in the other spectra is correct only for water without
+  any other particulates. A better approximation would require fine tuning in lake water.
+\end{itemize}
+\section{Related Works}
+
+\subsection{Smartphone Flourescence Spectroscopy}
+Yu, Tan, and Cunningham demonstrate a procedure to use smartphones for
+spectrophotometry of flourescence based biolological assays. Ther device
+involves a collecting lense and diffraction grating to "manually" seperate
+the incoming wavelength. Although their setup is designed for mobile lab use, and
+would not be applicable for field testing,the image analysis provides and result show
+the relative competence of smartphone cameras in detecting visible light for analysis.
+
+Image processing for the flourescence photospectrometer involved only a 850x180 band of pixel
+values from a incandescent lamp (150W halogen fiber-optic high intensity illuminator; Cole Parmer, IL, USA).
+Interestingly, they obsersved intensity fall offs at two particular wavelengths, 510 nm (cyan) and 580 nm (yellow),
+even though the incandescent light should produce continuous intensity. A light
+source fed through a tube with a diffraction grating could serve as a quick tool to
+measure relative efficiencies of sensors.
+
+The image analysis after obtaining the diffracted images was done after the RGB values
+were transformed to Hue-Saturation-Value (HSV) to obtain photon intensities at
+particular wavelength bands. This could possibly be a good avenue to find intensities
+from RGB in our measurements (After some normalization of course).
+
+
+\url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.717.9937&rep=rep1&type=pdf}
+
 
 % \underline{Note:} The intensity of light in the water will lower than
 % the intensity of light outside. The refractive be taken into account in the
 % rendering equation.
 % (The incident light will need to take into account Fresnel Diffraction possibly?)
+\section{Appendix}
+\subsection{Concentration Function calculation}
+The taylor expansion of $ 10^{\frac{-2\epsilon d C}{cos(\theta)}}$ is given by
+$$ 10^{\frac{-2\epsilon d C}{ cos(\theta)}} = 10^{-2\epsilon d C} - 10^{-2\epsilon d C}\epsilon d C x^2ln(10)$$
+We can use the taylor expantion to solve for rendering equation analytically up to the second order,
+\begin{align*}
+  L_{i 663} &= \int^{2\pi}_{\phi_i = 0}\int^{\theta_c}_{\theta_i = 0}
+  \frac{\rho_D}{\pi}  L_{s 663} 10^\frac{-2\epsilon d C}{cos(\theta)}cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
+      \\    &=  \int^{2\pi}_{\phi_i = 0}\int^{\theta_c}_{\theta_i = 0}
+      \frac{\rho_D}{\pi}  L_{s 663}\left(10^{-2\epsilon d C} - 10^{-2\epsilon d C}\epsilon d C \theta_i^2ln(10)\right)
+      cos(\theta_i)sin(\theta_i)d\theta_i d\phi_i
+      \\    &= \int^{\theta_c}_{\theta_i = 0}
+      2\rho_D  L_{s 663}\left(10^{-2\epsilon d C} - 10^{-2\epsilon d C}\epsilon d C \theta_i^2ln(10)\right)
+      cos(\theta_i)sin(\theta_i)d\theta_i
+      \\ &= 2\rho_D  L_{s 663}10^{-2\epsilon d C} \left(
+      \int^{\theta_c}_{\theta_i = 0}cos(\theta_i)sin(\theta_i)d\theta_i-\epsilon d C ln(10)\int^{\theta_c}_{\theta_i = 0} \theta_i^2 cos(\theta_i)sin(\theta_i)d\theta_i
+      \right)
+      \\&= 2\rho_D  L_{s 663}10^{-2\epsilon d C} \left(\left. \frac{-\cos^2(\theta_i)}{2}\right \rvert^{\theta_c}_{\theta_0} - \left.
+      \left(\epsilon d C ln(10)\right)\frac{2\theta_i\sin\left(2\theta_i\right)+\left(1-2\theta_i^2\right)\cos\left(2\theta_i\right)}{8} \right \rvert^{\theta_c}_{\theta_0}
+      \right)
+\end{align*}
+Defining the angular constats as k and q, we can approximate the Concentration function to the second order,
+\begin{align*}
+L_{i 663} = 2\rho_D  L_{s 663}10^{-2\epsilon d C} (k - Cq)
+\end{align*}
+
+\begin{align*}
+\frac{L_{i 663}}{2\rho_D  L_{s 663}} &= 10^{2\epsilon d C}(k - Cq)\\
+ln \left( \frac{L_{i 663} }{2\rho_D  L_{s 663}} \right ) &= \epsilon d C\cdot ln(10^{-2})+ln(k - Cq) \\
+ln \left( \frac{L_{i 663} }{2\rho_D  L_{s 663}} \right ) +k -1 &= C \\
+\frac{ln \left( \frac{L_{i 663} 10^{2\epsilon d} }{2\rho_D  L_{s 663}} \right ) +k -1}{q - ln(10)} &= C
+\end{align*}
 
 \section{References}
+[1] Harold H. Strain, Mary R. Thomas, Joseph J. Katz, Spectral absorption properties of ordinary and fully deuteriated chlorophylls a and b,
+In Biochimica et Biophysica Acta, Volume 75, 1963, Pages 306-311,
+ISSN 0006-3002, https://doi.org/10.1016/0006-3002(63)90617-6. \newline
+% (http://www.sciencedirect.com/science/article/pii/0006300263906176)
+[2] https://www.cs.princeton.edu/~smr/cs348c-97/surveypaper.html \newline
+[3] https://www2.cs.arizona.edu/classes/cs433/fall08/lectures/BRDFandGlobalIllum.pdf
+\newline
+[4] Beer-Lambert Law (\url{http://life.nthu.edu.tw/~labcjw/BioPhyChem/Spectroscopy/beerslaw.htm}) \newline
+[5] Fundamentals of Image Sensor Performance \url{http://www.cse.wustl.edu/~jain/cse567-11/ftp/imgsens/index.html#sec14}
 
-\begin{thebibliography}{9}
-  \bibitem{test}
-\end{thebibliography}
+[6] Image Acquisition: Handbook of machine vision engineering:, Volume 1, M.W. Burke.
 
+[7] Pixel Size \url{https://www.ephotozine.com/article/complete-guide-to-image-sensor-pixel-size-29652}
+
+\subsection{smartphone specs}
+[4] \url{https://techcrunch.com/2017/09/22/iphone-8-teardown-reveals-few-surprises-but-more-camera-details/}
+[5] \url{https://www.gsmarena.com/}
 
 
 \end{document}
