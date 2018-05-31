@@ -1,1 +1,1 @@
-# Spectrophotomer Notes
+# Spectrophotometer Notes
